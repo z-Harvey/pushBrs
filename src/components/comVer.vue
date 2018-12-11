@@ -50,7 +50,7 @@ export default {
 
 <style scoped>
 .comVer{
-    padding-top:100px;
+    padding:100px 0 10px;
 }
 .time{
     width:325px;
@@ -73,7 +73,7 @@ export default {
     padding:10px;
 }
 .contText{
-    width:325px;
+    width:345px;
     border-radius: 5px;
     background:#fff;
     text-align: left;

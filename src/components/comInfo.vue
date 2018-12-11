@@ -62,7 +62,6 @@
           </div>
         </div>
       </div>
-      <div style="height:90px;"></div>
     </div>
   </div>
 </template>
@@ -81,7 +80,7 @@ export default {
 
 <style scoped>
 .comInfo{
-  padding-top:90px;
+  padding:100px 0 10px;
 }
 .contentBox{
   width:345px;
@@ -150,6 +149,7 @@ export default {
 .contentzz>.zztit{
   font-size: 14px;
   color:#101010;
+  margin-bottom:9px;
 }
 .contentzz>div>img{
   width:325px;
