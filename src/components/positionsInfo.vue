@@ -1,0 +1,338 @@
+<template>
+    <div class="positionsInfo">
+        <div>
+            <div class="header">
+                <div class="posName">
+                    <span class="name">职位名称</span>
+                    <span class="time">剩余时间 1 天</span>
+                </div>
+                <div class="ind">北京 | 行业</div>
+                <div class="sala">
+                    <span class="le">薪资</span>
+                    <span class="ri"> 平均 4k 最高 10k</span>
+                </div>
+                <div class="nickBox" @click="path">
+                    <div class="imgBox">
+                        <img src="@/assets/touxiang.jpg" alt="">
+                    </div>
+                    <div class="nickIner">
+                        <div class="nickName">北京聚牛天下网络科技</div>
+                        <div class=nickTag>
+                            <div>特点一</div>
+                            <div>特点一</div>
+                            <span>n个在招职位</span>
+                        </div>
+                    </div>
+                    <img src="@/assets/right.png" alt="">
+                </div>
+            </div>
+            <div class="contBox">
+                <div class="tit">
+                    <span class="t">职位待遇历史情况</span>
+                    <span class="time">于yyyy-mm-dd 更新</span>
+                </div>
+                <div class="contText">
+                    <div>
+                        <div class="contLe">薪资</div>
+                        <div class="contRig"><span>平均 ￥n</span><span>最高 ￥n</span></div>
+                    </div>
+                    <div>
+                        <div class="contLe">福利</div>
+                        <div class="contRig">带薪年假5天/人/年、电话补助200元/人/年、出差高铁全额报销、出差500元以上酒店全额报销</div>
+                    </div>
+                    <div>
+                        <div class="contLe">培训</div>
+                        <div class="contRig">带薪年假5天/人/年、电话补助200元/人/年、出差高铁全额报销、出差500元以上酒店全额报销</div>
+                    </div>
+                    <div>
+                        <div class="contLe">获客支持</div>
+                        <div class="contRig">带薪年假5天/人/年、电话补助200元/人/年、出差高铁全额报销、出差500元以上酒店全额报销</div>
+                    </div>
+                </div>
+            </div>
+            <div class="contBox">
+                <div class="tit">
+                    <span class="t">职位待遇历史情况</span>
+                    <span class="time">于yyyy-mm-dd 更新</span>
+                </div>
+                <div class="contTextHid" :class="hidT? 'hids': ''" v-text="lishData" ref="textHid"></div>
+                <div class="hidTbtn" @click="clickHid" v-if="hidTbtn">...<span>显示全部</span></div>
+            </div>
+            <div class="contBox1">
+                <div class="imgBox1">
+                    <img src="@/assets/location.png" alt="">
+                </div>
+                <div class="addrs">
+                    <div class="addrs1">北京市朝阳区</div>
+                    <div class="addrs2">此处显示详细地址</div>
+                </div>
+            </div>
+            <div class="jiez" ref="jiez"></div>
+            <div class="footer">
+                <div>
+                    <img src="@/assets/start.png" alt="">
+                    <p>收藏</p>
+                </div>
+                <div>
+                    <img src="@/assets/share.png" alt="">
+                    <p>分享</p>
+                </div>
+                <button>投个简历</button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+  name: 'positionsInfo',
+  data () {
+    return {
+      hidT: false,
+      hidTbtn: false,
+      lishData: '带薪年假天人、年、电话补助元人年出差高铁全额报销出差500元以上酒店全额报销带薪年假5天/人/年、电话补助200元/人/年、出差高铁全额报销、出差500元以上酒店全额报销带薪年假5天/人/年、电话补助200元/人/年、出差高铁全额报销、出差500元以上酒店全额报销'
+    }
+  },
+  methods: {
+    textHid () {
+      if (this.$refs.textHid.clientHeight > this.$refs.jiez.clientHeight) {
+        this.hidT = true
+        this.hidTbtn = true
+      } else {
+        this.hidT = false
+      }
+    },
+    clickHid () {
+      this.hidT = !this.hidT
+    },
+    path () {
+      this.$router.push('comHome')
+    }
+  },
+  mounted () {
+    document.title = '职位详情'
+    this.textHid()
+  }
+}
+</script>
+
+<style scoped>
+.positionsInfo{
+    position: fixed;
+    top:0;
+    left:calc(50% - 187.5px);
+    width:375px;
+    height: 100%;
+    background:rgba(248, 248, 248, 1);
+    text-align: left;
+    overflow: auto;
+}
+.positionsInfo>div{
+    width: 100%;
+    height:100%;
+    padding-bottom: 70px;
+}
+.header{
+    padding:15px;
+    background:#fff;
+}
+.header>.posName{
+    height:18px;
+    line-height: 18px;
+}
+.header>.posName>.name{
+    font-size: 18px;
+    color:#101010;
+    line-height: 18px;
+}
+.header>.posName>.time{
+    font-size: 12px;
+    color:#ccc;
+    vertical-align: top;
+    line-height: 12px;
+    float: right;
+}
+.header>.ind{
+    color:#888;
+    font-size: 12px;
+    margin:8px 0 15px;
+}
+.header>.sala{
+    font-size: 12px;
+}
+.header>.sala>.le{
+    color: #101010;
+}
+.header>.sala>.ri{
+    color:rgba(255, 152, 0, 1);
+}
+.nickBox{
+    padding:10px 9px;
+    border-radius: 5px;
+    border:1px dashed rgba(255, 152, 0, 0.7);
+    margin-top:15px;
+    position: relative;
+}
+.nickBox>img{
+    width:14px;
+    height:14px;
+    position: absolute;
+    right:8px;
+    top:calc(50% - 7px);
+}
+.imgBox{
+    width:36px;
+    height:36px;
+    border-radius: 3px;
+    display: flex;
+    float: left;
+}
+.imgBox>img{
+    width:36px;
+    align-self: center;
+}
+.nickIner{
+    padding: 0 25px 0 40px;
+}
+.nickIner>.nickName{
+    font-size: 14px;
+    color:#101010;
+    line-height: 16px;
+}
+.nickIner>.nickTag{
+    margin-top:8px;
+}
+.nickIner>.nickTag>div{
+    display: inline-block;
+    padding:2px 5px;
+    background: rgba(255, 152, 0, 0.7);
+    color:#fff;
+    font-size: 10px;
+    border-radius: 2px;
+    margin-right:4px;
+}
+.nickIner>.nickTag>span{
+    font-size: 12px;
+    line-height: 14px;
+    color:#ccc;
+}
+.footer{
+    width:375px;
+    display: flex;
+    justify-content: space-around;
+    height:48px;
+    position: fixed;
+    bottom: 0;
+    left:calc(50% - 187.5px);
+    background:#fff;
+}
+.footer>div{
+    font-size: 10px;
+    color:#101010;
+    line-height: 10px;
+    padding-top:9px;
+}
+.footer>div>img{
+    width:20px;
+    height:20px;
+}
+.footer>button{
+    margin-top:6.5px;
+    font-size: 14px;
+    width:200px;
+    height:35px;
+    background:rgba(255, 152, 0, 1);
+    border-radius: 20px;
+    color:#fff;
+    border: none;
+}
+.footer>button::after{
+    border:none;
+}
+.contBox{
+    padding:0 15px;
+    background: #fff;
+    margin-top: 10px;
+}
+.contBox>.tit{
+    padding:15px 0;
+}
+.contBox>.tit>.t{
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 14px;
+}
+.contBox>.tit>.time{
+    color:rgba(206, 206, 206, 1);
+    font-size: 12px;
+    line-height: 14px;
+    float: right;
+}
+.contText{
+    font-size: 14px;
+    line-height: 20px;
+    padding:15px 0;
+}
+.contText>div>.contLe{
+    color:#101010;
+    float: left;
+    margin-right:8px;
+}
+.contText>div{
+    border:1px solid rgba(0,0,0,0);
+}
+.contText>div>.contRig{
+    color:#888;
+    display: flow-root;
+}
+.contTextHid{
+    font-size: 14px;
+    line-height: 20px;
+    color:#101010;
+    overflow: hidden;
+}
+.hids{
+    max-height: 80px;
+}
+.jiez{
+    height:80px;
+    position: fixed;
+    top:-80px;
+}
+.hidTbtn{
+    font-size: 14px;
+    margin-top:10px;
+    padding-bottom: 15px;
+}
+.hidTbtn>span{
+    color:rgba(255, 152, 0, 1);
+}
+.contBox1{
+    padding:17px 15px;
+    background:#fff;
+    display: flex;
+    margin-top:10px;
+}
+.imgBox1{
+    align-self: center;
+    width:26px;
+    height: 26px;
+    float: left;
+    margin-right:4px;
+}
+.imgBox1>img{
+    width:26px;
+    height:26px;
+}
+.addrs{
+
+}
+.addrs1{
+    font-size: 14px;
+    color:#101010;
+}
+.addrs2{
+    font-size: 14px;
+    color:#888;
+}
+</style>
