@@ -5,6 +5,10 @@ import App from './App'
 import router from './router'
 import 'lib-flexible/flexible'
 
+import Eject from './components/assembly/Eject' // api接口
+
+Vue.component('Eject', Eject)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

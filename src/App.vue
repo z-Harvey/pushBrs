@@ -18,4 +18,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 }
+.color888{color:#888;}
+.colorcecece{color:#cecece;}
+.colorff9800{color:rgba(255, 152, 0, 1);}
 </style>
