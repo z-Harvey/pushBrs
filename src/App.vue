@@ -1,12 +1,42 @@
 <template>
   <div id="app">
     <router-view/>
+    <Eject ref="eject" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  mounted () {
+    // let r = decodeURI(window.location.search.substr(1))
+    // let arr = r.split('&')
+    // let urlCode = null
+    // let pages = null
+    // for (let i = 0; i < arr.length; i++) {
+    //   let arr1 = arr[i].split('=')
+    //   if (arr1[0] === 'code') {
+    //     urlCode = arr1[1]
+    //   }
+    // }
+    // for (let i = 0; i < arr.length; i++) {
+    //   var arr1 = arr[i].split('=')
+    //   if (arr1[0] === 'pages') {
+    //     pages = arr1[1]
+    //   }
+    // }
+    let obj = {
+      code: '1'
+    }
+    this.api.login(obj, (res) => {
+      console.log('登录接口:', res)
+      this.global.userInfo['token'] = res.data.token
+      this.global.userStatus['has_resume'] = res.data.has_resume
+      this.global.userStatus['is_user'] = res.data.is_user
+    }, (err) => {
+      console.log('登录接口:', err)
+    })
+  }
 }
 </script>
 

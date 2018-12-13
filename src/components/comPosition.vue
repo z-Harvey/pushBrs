@@ -1,11 +1,11 @@
 <template>
     <div class="comPosition">
-        <div class="fors">
+        <div class="fors" v-for="(item, index) in dataLiist" :key="index">
             <div class="infos">
-                <span class="nickName">职位名称</span>
-                <span class="xiz">薪资<span> 平均 4k 最高 10k</span></span>
+                <span class="nickName" v-text="item.name">职位名称</span>
+                <span class="xiz">薪资<span v-text="' 平均 ' + item.mean_salary + ' 最高 ' + item.max_salary"></span></span>
             </div>
-            <div class="han">北京 | 行业</div>
+            <div class="han" v-text="item.area + ' | ' + item.industry"></div>
         </div>
     </div>
 </template>
@@ -15,9 +15,18 @@ export default {
   name: 'comPosition',
   data () {
     return {
+      dataLiist: []
     }
   },
   methods: {
+    init (id) {
+      this.api.positionZz('company=' + id, (res) => {
+        console.log(res)
+        this.dataLiist = res.data
+      }, (err) => {
+        console.log(err)
+      })
+    }
   }
 }
 </script>

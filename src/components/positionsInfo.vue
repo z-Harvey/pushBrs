@@ -3,24 +3,24 @@
         <div>
             <div class="header">
                 <div class="posName">
-                    <span class="name">职位名称</span>
-                    <span class="time">剩余时间 1 天</span>
+                    <span class="name" v-text="msg.name">职位名称</span>
+                    <span class="time" v-text="'剩余时间 ' + msg.less_date + ' 天'"></span>
                 </div>
-                <div class="ind">北京 | 行业</div>
+                <div class="ind" v-text="msg.area + ' | ' + msg.industry">北京 | 行业</div>
                 <div class="sala">
                     <span class="le">薪资</span>
-                    <span class="ri"> 平均 4k 最高 10k</span>
+                    <span class="ri" v-text="'平均 ' + msg.mean_salary + ' 最高 ' + msg.max_salary"> 平均 4k 最高 10k</span>
                 </div>
                 <div class="nickBox" @click="path">
                     <div class="imgBox">
-                        <img src="@/assets/touxiang.jpg" alt="">
+                        <img :src="msg.company.logo" alt="">
                     </div>
                     <div class="nickIner">
-                        <div class="nickName">北京聚牛天下网络科技</div>
+                        <div class="nickName" v-text="msg.company.name">北京聚牛天下网络科技</div>
                         <div class=nickTag>
-                            <div>特点一</div>
-                            <div>特点一</div>
-                            <span>n个在招职位</span>
+                            <!-- <div v-for="(item, index) in msg.company.point" :key="index" v-text="item">特点一</div> -->
+                            <div v-text="msg.company.point">特点一</div>
+                            <span v-text="msg.company.position_count + '个在招职位'"></span>
                         </div>
                     </div>
                     <img src="@/assets/right.png" alt="">
@@ -29,33 +29,32 @@
             <div class="contBox">
                 <div class="tit">
                     <span class="t">职位待遇历史情况</span>
-                    <span class="time">于yyyy-mm-dd 更新</span>
+                    <span class="time" v-text="'于 ' + msg.salary_info.add_time + ' 更新'"></span>
                 </div>
                 <div class="contText">
                     <div>
                         <div class="contLe">薪资</div>
-                        <div class="contRig"><span>平均 ￥n</span><span>最高 ￥n</span></div>
+                        <div class="contRig"><span v-text="'平均 ' + msg.salary_info.mean_salary"></span><span v-text="' 最高 ' + msg.salary_info.max_salary"></span></div>
                     </div>
                     <div>
                         <div class="contLe">福利</div>
-                        <div class="contRig">带薪年假5天/人/年、电话补助200元/人/年、出差高铁全额报销、出差500元以上酒店全额报销</div>
+                        <div class="contRig" v-text="msg.salary_info.welfare"></div>
                     </div>
                     <div>
                         <div class="contLe">培训</div>
-                        <div class="contRig">带薪年假5天/人/年、电话补助200元/人/年、出差高铁全额报销、出差500元以上酒店全额报销</div>
+                        <div class="contRig" v-text="msg.salary_info.train"></div>
                     </div>
                     <div>
                         <div class="contLe">获客支持</div>
-                        <div class="contRig">带薪年假5天/人/年、电话补助200元/人/年、出差高铁全额报销、出差500元以上酒店全额报销</div>
+                        <div class="contRig" v-text="msg.salary_info.hkzc"></div>
                     </div>
                 </div>
             </div>
             <div class="contBox">
                 <div class="tit">
-                    <span class="t">职位待遇历史情况</span>
-                    <span class="time">于yyyy-mm-dd 更新</span>
+                    <span class="t">职位描述</span>
                 </div>
-                <div class="contTextHid" :class="hidT? 'hids': ''" v-text="lishData" ref="textHid"></div>
+                <div class="contTextHid" :class="hidT? 'hids': ''" v-text="msg.desc" ref="textHid"></div>
                 <div class="hidTbtn" @click="clickHid" v-if="hidTbtn">...<span>显示全部</span></div>
             </div>
             <div class="contBox1">
@@ -63,8 +62,8 @@
                     <img src="@/assets/location.png" alt="">
                 </div>
                 <div class="addrs">
-                    <div class="addrs1">北京市朝阳区</div>
-                    <div class="addrs2">此处显示详细地址</div>
+                    <div class="addrs1" v-text="msg.area">北京市朝阳区</div>
+                    <div class="addrs2" v-text="msg.address">此处显示详细地址</div>
                 </div>
             </div>
             <div class="jiez" ref="jiez"></div>
@@ -88,9 +87,13 @@ export default {
   name: 'positionsInfo',
   data () {
     return {
+      que: null,
       hidT: false,
       hidTbtn: false,
-      lishData: '带薪年假天人、年、电话补助元人年出差高铁全额报销出差500元以上酒店全额报销带薪年假5天/人/年、电话补助200元/人/年、出差高铁全额报销、出差500元以上酒店全额报销带薪年假5天/人/年、电话补助200元/人/年、出差高铁全额报销、出差500元以上酒店全额报销'
+      msg: {
+        company: {},
+        salary_info: {}
+      }
     }
   },
   methods: {
@@ -106,12 +109,23 @@ export default {
       this.hidT = !this.hidT
     },
     path () {
-      this.$router.push('comHome')
+      this.$router.push({name: 'comHome', query: {comId: this.msg.company.id}})
+    },
+    init () {
+      this.que = this.$route.query
+      this.api.positionInfo(this.que.posId, (res) => {
+        console.log(res)
+        this.msg = res.data
+        // this.msg.company.point = this.msg.company.point.split('、')
+        this.textHid()
+      }, (err) => {
+        console.log(err)
+      })
     }
   },
   mounted () {
     document.title = '职位详情'
-    this.textHid()
+    this.init()
   }
 }
 </script>
@@ -290,6 +304,7 @@ export default {
     line-height: 20px;
     color:#101010;
     overflow: hidden;
+    padding-bottom: 15px;
 }
 .hids{
     max-height: 80px;

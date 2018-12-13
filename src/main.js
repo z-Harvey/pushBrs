@@ -5,11 +5,15 @@ import App from './App'
 import router from './router'
 import 'lib-flexible/flexible'
 
-import Eject from './components/assembly/Eject' // api接口
+import Global from './Global' // api接口
+import api from './api' // api接口
+import Eject from './components/assembly/Eject' // 弹出层
 
 Vue.component('Eject', Eject)
 
 Vue.config.productionTip = false
+Vue.prototype.api = api
+Vue.prototype.global = Global
 
 /* eslint-disable no-new */
 new Vue({

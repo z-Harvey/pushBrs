@@ -7,7 +7,7 @@
             </div>
             <div class="nickName color888">阿里巴巴（中国）网络技术有限公司</div>
             <div class="f2">
-                <span class="date colorcecece">yyyy-mm-dd hh:ss  投递简历</span>
+                <span class="date colorcecece">yyyy-mm-dd hh:ss 投递简历</span>
                 <span class="salary">薪资<span class="colorff9800"> 平均 4k 最高 10k</span></span>
             </div>
         </div>

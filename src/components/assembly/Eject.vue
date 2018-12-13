@@ -2,19 +2,19 @@
     <div class="Eject" v-if="show">
         <div class="msg" :class="['msg', msgs.msgTr? 'show': 'hid']" v-show="msgs.msgTr" v-text="msgs.text"></div>
         <div class="dialogs" v-if="dialogs.dialogsTr">
-            <div class="title" v-text="dialogs.title"></div>
-            <img class="X" src="@/assets/x.png" alt="">
-            <div class="content" v-text="dialogs.content"></div>
+            <div class="title" v-text="dialogs.text.title"></div>
+            <img class="X" src="@/assets/x.png" @click="close" alt="">
+            <div class="content" v-text="dialogs.text.content"></div>
             <div class="btnsBox">
-                <div class="btns2" v-if="dialogs.btns === 2">
-                    <button class="btnn" v-text="dialogs.no"></button>
-                    <button class="btny" v-text="dialogs.yes"></button>
+                <div class="btnsy" v-if="dialogs.text.btns === 'y'">
+                    <button class="btny lv" v-text="dialogs.text.yes || '确定'"></button>
                 </div>
-                <div class="btnsy" v-else-if="dialogs.btns === 'y'">
-                    <button class="btny" v-text="dialogs.yes"></button>
+                <div class="btnsn" v-else-if="dialogs.text.btns === 'n'">
+                    <button class="btnn lv" @click="close" v-text="dialogs.text.no || '取消'"></button>
                 </div>
-                <div class="btnsn" v-else-if="dialogs.btns === 'n'">
-                    <button class="btnn" v-text="dialogs.no"></button>
+                <div class="btns2" v-else>
+                    <button class="btnn" v-text="dialogs.text.no || '取消'" @click="close"></button>
+                    <button class="btny" v-text="dialogs.text.yes || '确定'"></button>
                 </div>
             </div>
         </div>
@@ -26,15 +26,17 @@ export default {
   name: 'Eject',
   data () {
     return {
-      show: true,
+      show: false,
       msgs: {
         text: null,
         msgTr: false
       },
       dialogs: {
         dialogsTr: false,
-        title: null,
-        content: null
+        text: {
+            title: null,
+            content: null
+        }
       }
     }
   },
@@ -49,7 +51,26 @@ export default {
       }, 1500)
     },
     dialog (obj) {
-      this.dialogs = obj
+      this.dialogs.text = obj
+      this.show = true
+      this.dialogs.dialogsTr = true
+    },
+    errmot (err) {
+      this.dialogs.text.title = this.global.HTTPStatusCode[err.status]
+      let str = ''
+      for (let i in err.data) {
+        str += i +':'
+        str += err.data[i] +'。'
+      }
+      this.dialogs.text.content = str
+      this.dialogs.text.btns = 'n'
+      this.show = true
+      this.dialogs.dialogsTr = true
+    },
+    close () {
+      this.msgs.msgTr = false
+      this.dialogs.dialogsTr = false
+      this.show = false
     }
   }
 }
@@ -63,6 +84,7 @@ export default {
     top:0;
     left:calc(50% - 187.5px);
     background:rgba(0,0,0,0);
+    display: flex;
 }
 .msg{
     padding:10px 15px;
@@ -72,7 +94,8 @@ export default {
     /* transition: ease .5s; */
     color:#fff;
     font-size: 14px;
-    margin-top:calc(70% - 22px);
+    align-self: center;
+    margin:0 auto;
 }
 .show{
     opacity: 1;
@@ -87,6 +110,8 @@ export default {
     margin:0 auto;
     padding:15px 0 0;
     position: relative;
+    align-self: center;
+    box-shadow: 0 0 15px 0 rgba(0,0,0,.5)
 }
 .dialogs>.title{
     font-size: 18px;
@@ -98,7 +123,11 @@ export default {
 .dialogs>.content{
     font-size: 15px;
     color:#888;
-    padding:0 15px;
+    padding:5px 15px 0;
+    width:220px;
+    overflow: auto;
+    word-wrap:break-word;
+    max-height:150px;
 }
 .dialogs>.X{
     width:13px;
@@ -110,7 +139,7 @@ export default {
 }
 .dialogs>.btnsBox{
     border-top: 1px solid #888;/*no*/
-    margin-top:26px;
+    margin-top:15px;
 }
 .btnsBox>div>button{
     height:50px;
@@ -136,5 +165,8 @@ export default {
 }
 .btnsBox>.btns2>.btnn{
     border-right:1px solid #888;/*no*/
+}
+.btnsBox>.btnsn>.lv{
+    color:rgba(2, 187, 0, 1);
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
     <div class="positionsList">
+        <div class="positionsLists"></div>
         <div class="sort">
             <div>
                 <span>行业</span>
@@ -18,28 +19,29 @@
             </div>
         </div>
         <div class="contList">
-            <div class="contFor" @click="path">
+            <div class="contFor" v-for="(item, index) in dataList" :key="index" @click="path(item)">
                 <div class="imgBox">
-                    <img src="@/assets/touxiang.jpg" alt="">
+                    <img :src="item.company.logo" alt="">
                 </div>
                 <div class="posInfo">
                     <div>
-                        <div class="posName">职位名称职位名称职位名称职位名称</div>
+                        <div class="posName" v-text="item.name">职位名称职位名称职位名称职位名称</div>
                         <div class="wages">
                             <span>薪资</span>
-                            <span class="wage">平均 4K 最高 10K</span>
+                            <span class="wage" v-text="'平均 ' + item.max_salary + ' 最高 ' + item.max_salary">平均 4K 最高 10K</span>
                         </div>
                     </div>
                     <div class="tagsBox">
-                        <div>特点一特点一</div>
-                        <div>特点一特点一</div>
+                        <!-- <div v-for="(items, indexs) in item.company.point" :key="indexs" v-text="items"></div> -->
+                        <div v-text="item.company.point"></div>
                     </div>
                     <div class="forFoot">
-                        <span class="nicName">聚牛天下</span>
-                        <span class="diqu">北京|行业</span>
+                        <span class="nicName" v-text="item.company.simple_name">聚牛天下</span>
+                        <span class="diqu" v-text="item.area + '|' + item.industry">北京|行业</span>
                     </div>
                 </div>
             </div>
+            <div style="height:80px;"></div>
         </div>
     </div>
 </template>
@@ -49,28 +51,52 @@ export default {
   name: 'positionsList',
   data () {
     return {
-      sortNav: [false, false, false]
+      sortNav: [false, false, false],
+      dataList: []
     }
   },
   methods: {
-    path () {
-      this.$router.push('/positionsInfo')
+    path (item) {
+      if (this.global.userStatus.is_user === 0) {
+        this.$router.push('login')
+        return
+      }
+      this.$router.push({name: 'positionsInfo', query: {posId: item.id}})
+    },
+    init () {
+      this.api.positionList((res) => {
+        this.dataList = res.data
+        // this.dataList.map((p1, p2) => {
+        //   p1.company.point = p1.company.point.split('、')
+        // })
+        console.log('职位列表：', this.dataList)
+      }, (err) => {
+        console.log(err)
+      })
     }
   },
   mounted () {
     document.title = '推推牛人'
+    this.init()
   }
 }
 </script>
 
 <style scoped>
 .positionsList{
+    width:375px;
+    height:100%;
+    background: rgba(240, 239, 245, 1);
+    left:calc(50% - 187.5px);
+}
+.positionsLists{
     position: fixed;
     width:375px;
     height: calc(100% - 45px);
     background: rgba(240, 239, 245, 1);
     left:calc(50% - 187.5px);
     overflow: auto;
+    z-index: -1;
 }
 .sort{
     position: fixed;
@@ -102,7 +128,7 @@ export default {
     margin:0 auto 10px;
     background:#fff;
     border-radius: 5px;
-    height:64px;
+    min-height:64px;
 }
 .imgBox{
     border-radius: 3px;
@@ -125,6 +151,7 @@ export default {
     float: left;
     font-size: 14px;
     line-height: 14px;
+    text-align: left;
 }
 .wages{
     text-align: right;

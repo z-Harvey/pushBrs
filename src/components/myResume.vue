@@ -9,7 +9,7 @@
                 <img class="xb" src="@/assets/woman.png" alt="">
                 <img class="xb" src="@/assets/man.png" alt="">
             </div>
-            <div class="nameAge">李筱沫  26岁</div>
+            <div class="nameAge">李筱沫26岁</div>
             <div class="pos">此处显示期望职位 | n年工作经验</div>
         </div>
         <div class="conts">

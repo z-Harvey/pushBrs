@@ -1,7 +1,7 @@
 <template>
     <div class="comVer">
         <div class="time">
-            <span class="tit">验证日期</span><span class="rig">于yyyy-mm-dd认证通过</span>
+            <span class="tit">验证日期</span><span class="rig" v-text="'于 ' + msg.check_date + '认证通过'"></span>
         </div>
         <div class="contText">
             <div class="tits">
@@ -41,9 +41,18 @@ export default {
   name: 'comVer',
   data () {
     return {
+      msg: {}
     }
   },
   methods: {
+    init (id) {
+      this.api.companySdyz(id, (res) => {
+        console.log(res)
+        this.msg = res.data
+      }, (err) => {
+        console.log(err)
+      })
+    }
   }
 }
 </script>

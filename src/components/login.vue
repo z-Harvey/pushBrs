@@ -7,11 +7,12 @@
         <div>
             <input class="phoneNum" type="number" pattern="[0-9]*" maxlength="30" v-model.number="phone" placeholder="请输入手机号" @blur="zhengze">
             <div class="yanz">
-                <input class="yzm" type="number" maxlength="6" pattern="[0-9]*" placeholder="请输入短信验证码" @blur="blurs">
-                <button>获取验证码</button>
+                <input class="yzm" type="number" maxlength="6" pattern="[0-9]*" v-model="yzm" placeholder="请输入短信验证码" @blur="blurs">
+                <button @click="hq" v-if="yzmBtn" v-bind:disabled="phone.length > 0">获取验证码</button>
+                <button class="noBtn" disabled v-else v-text="sss"></button>
             </div>
         </div>
-        <img class="loginBtn" src="@/assets/log_btn.png" alt="">
+        <img class="loginBtn" @click="zc" src="@/assets/log_btn.png" alt="">
         <Eject ref="eject" />
     </div>
 </template>
@@ -22,7 +23,10 @@ export default {
   data () {
     return {
       ph_ts: false,
-      phone: null
+      phone: '',
+      yzmBtn: true,
+      sss: '正在发送...',
+      yzm: ''
     }
   },
   methods: {
@@ -36,6 +40,47 @@ export default {
     blurs () {
       document.documentElement.scrollTop = document.documentElement.scrollTop
       document.body.scrollTop = document.body.scrollTop
+    },
+    hq () {
+      let obj = {
+        mobile: this.phone
+      }
+      this.api.verifyCode(obj, (res) => {
+        let s = 60
+        this.yzmBtn = false
+        this.sss = s + 's'
+        let indexs = setInterval(() => {
+          s -= 1
+          this.sss = s + 's'
+          if (s === 0) {
+            this.yzmBtn = true
+            clearInterval(indexs)
+            this.sss = '正在发送...'
+          }
+        }, 1000)
+      }, (err) => {
+        // console.log(err)
+        this.$refs.eject.errmot(err)
+      })
+    },
+    zc () {
+      if (this.phone === '') {
+        this.$refs.eject.msg('手机号不能为空')
+        return
+      } else if (this.yzm === '') {
+        this.$refs.eject.msg('验证码不能为空')
+        return
+      }
+      let obj = {
+        mobile: this.phone,
+        verify_code: this.yzm,
+        token: this.global.userInfo.token
+      }
+      this.api.register(obj, (res) => {
+        console.log(res)
+      }, (err) => {
+        console.log(err)
+      })
     }
   },
   mounted () {
@@ -120,6 +165,9 @@ input::after{
 }
 .yanz>button::after{
     border:none;
+}
+.yanz>.noBtn{
+    color:#888;
 }
 .loginBtn{
     width:50px;

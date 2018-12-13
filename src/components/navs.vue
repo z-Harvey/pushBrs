@@ -41,6 +41,7 @@ export default {
     left:calc(50% - 187.5px);
     display: flex;
     justify-content: space-around;
+    background:#fff;
 }
 .Dh>div{
     width:50%;

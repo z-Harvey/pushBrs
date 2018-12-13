@@ -4,52 +4,24 @@
       <div class="contentBox">
         <div class="title">标杆客户</div>
         <div class="content">
-          <div class="forBox">
+          <div class="forBox" v-for="(item, index) in msg.bg_customer" :key="index">
             <div class="imgBox">
-              <img src="@/assets/touxiang.jpg" alt="">
+              <img :src="item.logo" alt="">
             </div>
-            <p>公司简称</p>
-          </div>
-          <div class="forBox">
-            <div class="imgBox">
-              <img src="@/assets/touxiang.jpg" alt="">
-            </div>
-            <p>公司简称</p>
-          </div>
-          <div class="forBox">
-            <div class="imgBox">
-              <img src="@/assets/touxiang.jpg" alt="">
-            </div>
-            <p>公司简称</p>
-          </div>
-          <div class="forBox">
-            <div class="imgBox">
-              <img src="@/assets/touxiang.jpg" alt="">
-            </div>
-            <p>公司简称</p>
-          </div>
-          <div class="forBox">
-            <div class="imgBox">
-              <img src="@/assets/touxiang.jpg" alt="">
-            </div>
-            <p>公司简称</p>
+            <p v-text="item.simple_name">公司简称</p>
           </div>
         </div>
       </div>
       <div class="contentBox">
         <div class="title">企业简介</div>
-        <div class="contents">此处显示企业简介内容此业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容此处显示企业简介内容</div>
+        <div class="contents" v-text="msg.desc"></div>
       </div>
       <div class="contentBox">
         <div class="title">公司地址</div>
         <div class="contents">
-          <div class="fors">
+          <div class="fors" v-for="(item, index) in msg.address" :key="index">
             <div class="yuan"></div>
-            <div class="forTex">此处显示地址信息</div>
-          </div>
-          <div class="fors">
-            <div class="yuan"></div>
-            <div class="forTex">此处显示地址信息</div>
+            <div class="forTex" v-text="item.address"></div>
           </div>
         </div>
       </div>
@@ -58,7 +30,7 @@
         <div class="contentzz">
           <div class="zztit">营业执照</div>
           <div>
-            <img src="@/assets/touxiang.jpg" alt="">
+            <img v-for="(item, index) in msg.materials" :key="index" :src="item.images" alt="">
           </div>
         </div>
       </div>
@@ -71,9 +43,18 @@ export default {
   name: 'comInfo',
   data () {
     return {
+      msg: {}
     }
   },
   methods: {
+    init (id) {
+      this.api.companyInfo(id, (res) => {
+        console.log(res)
+        this.msg = res.data
+      }, (err) => {
+        console.log(err)
+      })
+    }
   }
 }
 </script>

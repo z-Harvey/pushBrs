@@ -2,14 +2,14 @@
     <div class="comHome">
         <div class="header">
             <div class="comImg">
-                <img src="@/assets/touxiang.jpg" alt="">
+                <img :src="msg.logo" alt="">
             </div>
             <div class="comInfo">
-                <div class="comName">北京聚牛天下网络科技有限公司</div>
+                <div class="comName" v-text="msg.name">北京聚牛天下网络科技有限公司</div>
                 <div class="comTag">
-                    <div>特点一</div>
-                    <div>特点一</div>
-                    <span>n个在招职位</span>
+                    <!-- <div v-for="(item, index) in msg.point" :key="index" v-text="item">特点一</div> -->
+                    <div v-text="msg.point">特点一</div>
+                    <span v-text="msg.position_count + ' 个在招职位'"></span>
                 </div>
                 <div class="navTag">
                     <div @click="navClick(0)">
@@ -21,7 +21,7 @@
                         <div :class="navTag[1]? 'paa': ''"></div>
                     </div>
                     <div @click="navClick(2)">
-                        <p :class="navTag[2]? 'pss': ''">再招职位(n)</p>
+                        <p :class="navTag[2]? 'pss': ''" v-text="'再招职位(' + msg.position_count + ')'"></p>
                         <div :class="navTag[2]? 'paa': ''"></div>
                     </div>
                 </div>
@@ -47,7 +47,8 @@ export default {
   },
   data () {
     return {
-      navTag: [true, false, false]
+      navTag: [true, false, false],
+      msg: {}
     }
   },
   methods: {
@@ -55,7 +56,32 @@ export default {
       let arr = [false, false, false]
       arr[num] = true
       this.navTag = arr
+      switch (num) {
+        case 0:
+          this.$refs.comInfo.init(this.msg.id)
+          break
+        case 1:
+          this.$refs.comVer.init(this.msg.id)
+          break
+        case 2:
+          this.$refs.comPosition.init(this.msg.id)
+          break
+      }
+    },
+    init () {
+      this.api.companyHeader(this.que.comId, (res) => {
+        console.log('公司首页:', res)
+        this.msg = res.data
+        // this.msg.point = res.data.point.split('、')
+        this.navClick(0)
+      }, (err) => {
+        console.log(err)
+      })
     }
+  },
+  mounted () {
+    this.que = this.$route.query
+    this.init()
   }
 }
 </script>
