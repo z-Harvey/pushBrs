@@ -56,7 +56,8 @@ export default {
       this.dialogs.dialogsTr = true
     },
     errmot (err) {
-      this.dialogs.text.title = this.global.HTTPStatusCode[err.status]
+      console.log(err)
+      this.dialogs.text.title = this.global.HTTPStatusCode[err.status] || err.status
       let str = ''
       for (let i in err.data) {
         str += i +':'

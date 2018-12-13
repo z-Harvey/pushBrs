@@ -59,7 +59,6 @@ export default {
           }
         }, 1000)
       }, (err) => {
-        // console.log(err)
         this.$refs.eject.errmot(err)
       })
     },
@@ -79,7 +78,7 @@ export default {
       this.api.register(obj, (res) => {
         console.log(res)
       }, (err) => {
-        console.log(err)
+        this.$refs.eject.errmot(err)
       })
     }
   },
