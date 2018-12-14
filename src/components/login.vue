@@ -76,9 +76,19 @@ export default {
         token: this.global.userInfo.token
       }
       this.api.register(obj, (res) => {
-        console.log(res)
+        if (res.status === 201) {
+          this.global.userInfo.token = res.data.token
+          this.global.userStatus.is_user = 1
+          this.$router.go(-1)
+        }
       }, (err) => {
-        this.$refs.eject.errmot(err)
+        if (err.data.non_field_errors ? err.data.non_field_errors[0] === '验证码无效' : false) {
+          this.$refs.eject.msg('验证码错误！')
+        } else if (err.data.verify_code ? err.data.verify_code[0] === '请确保这个字段至少包含6个字符。' : false) {
+          this.$refs.eject.msg('请输入正确验证码')
+        } else {
+          this.$refs.eject.errmot(err)
+        }
       })
     }
   },

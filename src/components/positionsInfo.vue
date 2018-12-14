@@ -76,9 +76,10 @@
                     <img src="@/assets/share.png" alt="">
                     <p>分享</p>
                 </div>
-                <button>投个简历</button>
+                <button @click="pushResume">投个简历</button>
             </div>
         </div>
+        <Eject ref="eject" />
     </div>
 </template>
 
@@ -105,6 +106,65 @@ export default {
         this.hidT = false
       }
     },
+    pushResume () {
+      if (this.global.userStatus.is_user === 0) {
+        this.$router.push('login')
+        return
+      }
+      let obj = {}
+      this.api.resumeCheck((res) => {
+        if (res.status === 200) {
+          if (res.data.resume_count === 0) {
+            this.$refs.eject.dialog({
+              title: '您还没有简历',
+              content: '您可以选择创建微简历或上传简历,您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历',
+              btns: 2,
+              no: '上传简历',
+              yes: '创建微简历',
+              success: () => {
+                this.$router.push({name: 'newResume', query: {id: this.msg.id}})
+              }
+            })
+          } else if (res.data.resume_count === 1) {
+            this.$refs.eject.dialog({
+              title: '',
+              content: '请选择您想要投递的简历',
+              btns: 2,
+              no: '简历附件',
+              yes: '微简历',
+              success: () => {
+                this.$router.push({name: 'newResume', query: {id: this.msg.id}})
+              }
+            })
+            return
+            obj = {
+              resume_type: 0,
+              position: this.msg.id
+            }
+            this.api.postMyApply(obj, (res) => {
+              if (res.status === 201) {
+                this.$router.push('signUpSuccess')
+              }
+            }, (err) => {
+              console.log(err)
+            })
+          } else if (res.data.resume_count === 2) {
+            this.$refs.eject.dialog({
+              title: '',
+              content: '您可以选择创建微简历或上传简历,请选择您想要投递的简历',
+              btns: 2,
+              no: '上传简历',
+              yes: '创建微简历',
+              success: () => {
+                this.$router.push({name: 'newResume', query: {id: this.msg.id}})
+              }
+            })
+          }
+        }
+      }, (err) => {
+        this.$refs.eject.errmot(err)
+      })
+    },
     clickHid () {
       this.hidT = !this.hidT
     },
@@ -114,9 +174,7 @@ export default {
     init () {
       this.que = this.$route.query
       this.api.positionInfo(this.que.posId, (res) => {
-        console.log(res)
         this.msg = res.data
-        // this.msg.company.point = this.msg.company.point.split('、')
         this.textHid()
       }, (err) => {
         console.log(err)

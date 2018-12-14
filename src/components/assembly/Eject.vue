@@ -1,20 +1,20 @@
 <template>
-    <div class="Eject" v-if="show">
+    <div class="Eject" v-show="show">
         <div class="msg" :class="['msg', msgs.msgTr? 'show': 'hid']" v-show="msgs.msgTr" v-text="msgs.text"></div>
-        <div class="dialogs" v-if="dialogs.dialogsTr">
+        <div class="dialogs" v-show="dialogs.dialogsTr">
             <div class="title" v-text="dialogs.text.title"></div>
             <img class="X" src="@/assets/x.png" @click="close" alt="">
-            <div class="content" v-text="dialogs.text.content"></div>
+            <div class="content" v-text="dialogs.text.content" ref="eje"></div>
             <div class="btnsBox">
-                <div class="btnsy" v-if="dialogs.text.btns === 'y'">
+                <div class="btnsy" v-show="dialogs.text.btns === 'y'">
                     <button class="btny lv" v-text="dialogs.text.yes || '确定'"></button>
                 </div>
-                <div class="btnsn" v-else-if="dialogs.text.btns === 'n'">
+                <div class="btnsn" v-show="dialogs.text.btns === 'n'">
                     <button class="btnn lv" @click="close" v-text="dialogs.text.no || '取消'"></button>
                 </div>
-                <div class="btns2" v-else>
+                <div class="btns2" v-show="dialogs.text.btns === 2">
                     <button class="btnn" v-text="dialogs.text.no || '取消'" @click="close"></button>
-                    <button class="btny" v-text="dialogs.text.yes || '确定'"></button>
+                    <button class="btny" v-text="dialogs.text.yes || '确定'" @click="qd"></button>
                 </div>
             </div>
         </div>
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import BScroll from 'better-scroll'
+
 export default {
   name: 'Eject',
   data () {
@@ -34,17 +36,36 @@ export default {
       dialogs: {
         dialogsTr: false,
         text: {
-            title: null,
-            content: null
+          title: null,
+          content: null
         }
-      }
+      },
+      success: null,
+      fail: null
     }
   },
   methods: {
+    qd () {
+      this.msgs.msgTr = false
+      this.dialogs.dialogsTr = false
+      this.show = false
+      if (this.success) {
+        this.success()
+      }
+    },
+    close () {
+      this.msgs.msgTr = false
+      this.dialogs.dialogsTr = false
+      this.show = false
+      if (this.fail) {
+        this.fail()
+      }
+    },
     msg (obj) {
       this.show = true
       this.msgs.text = obj
       this.msgs.msgTr = true
+      this.initScorll()
       setTimeout(() => {
         this.msgs.msgTr = false
         this.show = false
@@ -54,25 +75,36 @@ export default {
       this.dialogs.text = obj
       this.show = true
       this.dialogs.dialogsTr = true
+      //   this.initScorll()
+      if (obj.success) {
+        this.success = obj.success
+      }
+      if (obj.fail) {
+        this.fail = obj.fail
+      }
     },
     errmot (err) {
-      console.log(err)
       this.dialogs.text.title = this.global.HTTPStatusCode[err.status] || err.status
       let str = ''
       for (let i in err.data) {
-        str += i +':'
-        str += err.data[i] +'。'
+        str += i + ':'
+        str += err.data[i] + '。'
       }
       this.dialogs.text.content = str
       this.dialogs.text.btns = 'n'
       this.show = true
       this.dialogs.dialogsTr = true
     },
-    close () {
-      this.msgs.msgTr = false
-      this.dialogs.dialogsTr = false
-      this.show = false
+    initScorll () {
+      let eje = this.$refs.eje
+      let bs = new BScroll(eje, {probeType: 3})
+      bs.on('scroll', (pos) => {
+        // console.log(pos.x + '~' + posx.y)
+        console.log(pos)
+      })
     }
+  },
+  mounted () {
   }
 }
 </script>
@@ -86,6 +118,8 @@ export default {
     left:calc(50% - 187.5px);
     background:rgba(0,0,0,0);
     display: flex;
+    text-align: center;
+    overflow: hidden;
 }
 .msg{
     padding:10px 15px;

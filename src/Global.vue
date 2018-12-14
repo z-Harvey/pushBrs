@@ -27,9 +27,23 @@ let HTTPStatusCode = {
   504: '网关超时',
   505: 'HTTP 版本不受支持'
 }
+// let glFn = {
+//   stop () {
+//     let mo = function (e) {e.preventDefault()}
+//     document.body.style.overflow = 'hidden'
+//     // document.addEventListener("touchmove",mo,false);//禁止页面滑动
+//   },
+//   /***取消滑动限制***/
+//   move () {
+//     let mo = function (e) {e.preventDefault()}
+//     document.body.style.overflow=''//出现滚动条
+//     document.removeEventListener("touchmove", mo, false);
+//   }
+// }
 export default{
   userInfo,
   userStatus,
   HTTPStatusCode
+  // glFn
 }
 </script>

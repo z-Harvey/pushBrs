@@ -92,12 +92,99 @@ let companySdyz = (id, success, error) => {
  * 再招职位 get company=id
  */
 let positionZz = (data, success, error) => {
-  axios.get(path + '/position//?link=' + (Date.parse(new Date()) + 3) + '&' + data).then((res) => {
+  axios.get(path + '/position/?link=' + (Date.parse(new Date()) + 3) + '&' + data).then((res) => {
     success(res)
   }, (err) => {
     error(err.response)
   })
 }
+/**
+ * 检查目前拥有的简历类型 get
+ */
+let resumeCheck = (success, error) => {
+  axios.get(path + '/resume_check/?link=' + (Date.parse(new Date()) + 3)).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 创建个人简历时，获取初始信息 get  {id}
+ * advantage  我的优势
+ * attachment  附件 e
+ * city  期望城市
+ * edu_history  教育经历  e
+ * industry  期望行业
+ * job_status  求职状态
+ * position  期望职位
+ * salary  期望薪资
+ * user {  头部信息
+ *   avatar  头像
+ *   gender  性别
+ *   name  姓名
+ *   user  ID
+ * }
+ * work_history  工作经历 e
+ */
+let getResumeInit = (id, success, error) => {
+  axios.get(path + '/resume/' + id + '/?link=' + (Date.parse(new Date()) + 3)).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 行业接口
+ */
+let getSearchIndustry = function (data, success, error) {
+  axios.get(path + '/industry/?' + data).then(function (res) {
+    success(res)
+  }, function (err) {
+    error(err.response)
+  })
+}
+/**
+ * 图片上传 type  头像 = 1，附件 = 2
+ */
+let uploadImg = (data, success, error) => {
+  axios.post(path + '/upload/', data).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 获取城市列表
+ * pid=****
+ */
+let getAreaList = function (data, success, error) {
+  axios.get(path + '/area/?' + data).then(function (res) {
+    success(res)
+  }, function (err) {
+    error(err.response)
+  })
+}
+/**
+ * 提交微简历
+ */
+let postResume = (data, success, error) => {
+  axios.post(path + '/resume/', data).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 投递简历
+ */
+let postMyApply = (data, success, error) => {
+  axios.post(path + '/MyApply/', data).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+
 export default{
   login, // 登录
   verifyCode, // 发送验证码
@@ -107,6 +194,13 @@ export default{
   companyHeader, // 公司信息 头部
   companyInfo, // 公司信息
   companySdyz, // 实地验证
-  positionZz // 在招职位
+  positionZz, // 在招职位
+  resumeCheck, // 检查目前拥有的简历类型
+  getResumeInit, // 创建个人简历时，获取初始信息
+  getSearchIndustry, // 获取行业接口
+  uploadImg, // 上传图片获取路径
+  getAreaList, // 城市接口
+  postResume, // 提交微简历
+  postMyApply
 }
 </script>

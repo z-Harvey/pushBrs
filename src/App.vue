@@ -33,8 +33,9 @@ export default {
       this.global.userInfo['token'] = res.data.token
       this.global.userStatus['has_resume'] = res.data.has_resume
       this.global.userStatus['is_user'] = res.data.is_user
+      // this.$router.push({name: 'newResume', query: {id: 2}})
     }, (err) => {
-      console.log('登录接口:', err)
+      this.$refs.eject.errmot(err)
     })
   }
 }

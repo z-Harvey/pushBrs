@@ -57,10 +57,6 @@ export default {
   },
   methods: {
     path (item) {
-      if (this.global.userStatus.is_user === 0) {
-        this.$router.push('login')
-        return
-      }
       this.$router.push({name: 'positionsInfo', query: {posId: item.id}})
     },
     init () {
@@ -88,6 +84,7 @@ export default {
     height:100%;
     background: rgba(240, 239, 245, 1);
     left:calc(50% - 187.5px);
+    margin:0 auto;
 }
 .positionsLists{
     position: fixed;
