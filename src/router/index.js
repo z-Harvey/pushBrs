@@ -7,10 +7,10 @@ import positionsInfo from '@/components/positionsInfo' // 职位详情
 import comHome from '@/components/comHome' // 公司首页
 import login from '@/components/login' // 登录
 import signUpSuccess from '@/components/signUpSuccess' // 投递成功
-import newResume from '@/components/newResume' // 新建/编辑个人信息
+import newResume from '@/components/newResume' // 新建/编辑 简历
 import upResume from '@/components/upResume' // 上传个人简历
-import userInfo from '@/components/userInfo' // 个人信息
-import my from '@/components/my' // 我的
+import userInfo from '@/components/userInfo' // 编辑个人信息
+// import my from '@/components/my' // 我的
 import myDelivery from '@/components/myDelivery' // 我的投递
 import DeliveryInfo from '@/components/DeliveryInfo' // 投递详情
 import positionCollection from '@/components/positionCollection' // 职位收藏
@@ -30,7 +30,7 @@ export default new Router({
     {path: '/newResume', name: 'newResume', component: newResume},
     {path: '/upResume', name: 'upResume', component: upResume},
     {path: '/userInfo', name: 'userInfo', component: userInfo},
-    {path: '/my', name: 'my', component: my},
+    // {path: '/my', name: 'my', component: my},
     {path: '/myDelivery', name: 'myDelivery', component: myDelivery},
     {path: '/DeliveryInfo', name: 'DeliveryInfo', component: DeliveryInfo},
     {path: '/positionCollection', name: 'positionCollection', component: positionCollection},

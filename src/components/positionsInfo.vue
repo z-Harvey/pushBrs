@@ -126,17 +126,6 @@ export default {
               }
             })
           } else if (res.data.resume_count === 1) {
-            this.$refs.eject.dialog({
-              title: '',
-              content: '请选择您想要投递的简历',
-              btns: 2,
-              no: '简历附件',
-              yes: '微简历',
-              success: () => {
-                this.$router.push({name: 'newResume', query: {id: this.msg.id}})
-              }
-            })
-            return
             obj = {
               resume_type: 0,
               position: this.msg.id
@@ -146,17 +135,40 @@ export default {
                 this.$router.push('signUpSuccess')
               }
             }, (err) => {
-              console.log(err)
+              this.$refs.eject.errmot(err)
             })
           } else if (res.data.resume_count === 2) {
             this.$refs.eject.dialog({
               title: '',
-              content: '您可以选择创建微简历或上传简历,请选择您想要投递的简历',
+              content: '请选择您想要投递的简历',
               btns: 2,
-              no: '上传简历',
-              yes: '创建微简历',
+              no: '简历附件',
+              yes: '微简历',
               success: () => {
-                this.$router.push({name: 'newResume', query: {id: this.msg.id}})
+                obj = {
+                  resume_type: 1,
+                  position: this.msg.id
+                }
+                this.api.postMyApply(obj, (res) => {
+                  if (res.status === 201) {
+                    this.$router.push('signUpSuccess')
+                  }
+                }, (err) => {
+                  this.$refs.eject.errmot(err)
+                })
+              },
+              fail: () => {
+                obj = {
+                  resume_type: 2,
+                  position: this.msg.id
+                }
+                this.api.postMyApply(obj, (res) => {
+                  if (res.status === 201) {
+                    this.$router.push('signUpSuccess')
+                  }
+                }, (err) => {
+                  this.$refs.eject.errmot(err)
+                })
               }
             })
           }
@@ -177,7 +189,7 @@ export default {
         this.msg = res.data
         this.textHid()
       }, (err) => {
-        console.log(err)
+        this.$refs.eject.errmot(err)
       })
     }
   },

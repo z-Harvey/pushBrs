@@ -137,9 +137,9 @@ let getResumeInit = (id, success, error) => {
  * 行业接口
  */
 let getSearchIndustry = function (data, success, error) {
-  axios.get(path + '/industry/?' + data).then(function (res) {
+  axios.get(path + '/industry/?' + data).then((res) => {
     success(res)
-  }, function (err) {
+  }, (err) => {
     error(err.response)
   })
 }
@@ -158,9 +158,9 @@ let uploadImg = (data, success, error) => {
  * pid=****
  */
 let getAreaList = function (data, success, error) {
-  axios.get(path + '/area/?' + data).then(function (res) {
+  axios.get(path + '/area/?' + data).then((res) => {
     success(res)
-  }, function (err) {
+  }, (err) => {
     error(err.response)
   })
 }
@@ -169,6 +169,16 @@ let getAreaList = function (data, success, error) {
  */
 let postResume = (data, success, error) => {
   axios.post(path + '/resume/', data).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 修改微简历
+ */
+let putResume = (data, success, error) => {
+  axios.put(path + '/resume/' + Date.parse(new Date()) + '/', data).then((res) => {
     success(res)
   }, (err) => {
     error(err.response)
@@ -184,8 +194,73 @@ let postMyApply = (data, success, error) => {
     error(err.response)
   })
 }
+/**
+ * '我'界面信息
+ */
+let myInfo = function (success, error) {
+  axios.get(path + '/mine/' + (Date.parse(new Date()) + 3) + '/').then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 我的投递列表 status = 0-待反馈 1-代面试。2-已完成
+ */
+let MyApplyList = function (data, success, error) {
+  axios.get(path + '/MyApply/?link=' + (Date.parse(new Date()) + 3) + '&' + data).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 我的微简历 user
+ */
+let MyResume = function (success, error) {
+  axios.get(path + '/resume/' + Date.parse(new Date()) + '/?link=' + (Date.parse(new Date()) + 3)).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 我的简历附件 user
+ */
+let MyResumeFile = function (success, error) {
+  axios.get(path + '/resume_file/?link=' + (Date.parse(new Date()) + 3)).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 获取个人信息数据
+ */
+let getuserInfo = function (success, error) {
+  axios.get(path + '/user/' + Date.parse(new Date()) + '/?link=' + (Date.parse(new Date()) + 3)).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 修改个人信息数据
+ */
+let putUserInfo = function (data, success, error) {
+  axios.put(path + '/user/' + Date.parse(new Date()) + '/', data).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
 
 export default{
+  getuserInfo, // 获取个人信息数据
+  putUserInfo, //修改个人信息数据
+  MyResumeFile, // 我的简历附件
+  MyResume, // 我的微简历
+  MyApplyList, // 我的投递列表
   login, // 登录
   verifyCode, // 发送验证码
   register, // 注册
@@ -201,6 +276,8 @@ export default{
   uploadImg, // 上传图片获取路径
   getAreaList, // 城市接口
   postResume, // 提交微简历
-  postMyApply
+  putResume, // 修改微简历
+  postMyApply,
+  myInfo // '我'界面信息
 }
 </script>

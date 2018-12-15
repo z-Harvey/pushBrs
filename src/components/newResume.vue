@@ -125,7 +125,7 @@
         </div>
         <div style="height:100px;"></div>
         <div class="footerBtn">
-            <button @click="submit">创建简历</button>
+            <button @click="submit" v-text="que.typ === 'edit' ? '修改简历' : '创建简历'">创建简历</button>
         </div>
         <links ref="links"/>
         <Eject ref="eject" />
@@ -137,8 +137,10 @@ export default {
   name: 'newResume',
   data () {
     return {
+      que: {},
       areaIner: '',
       job_status: '',
+      jobArr: ['离职-随时到岗', '在职-暂不考虑', '在职-考虑机会', '在职-月内到岗'],
       pushData: {
         user: {
           avatar: '',
@@ -210,6 +212,7 @@ export default {
         } else {
           res.data.edu_history = JSON.parse(res.data.edu_history)
         }
+        this.job_status = this.jobArr[res.data.job_status]
         this.pushData = res.data
       }, (err) => {
         console.log(err)
@@ -349,7 +352,19 @@ export default {
       data.work_history = JSON.stringify(data.work_history)
       data.attachment = JSON.stringify(data.attachment)
       data.user = JSON.stringify(data.user)
-      console.log(data)
+      if (this.que.typ === 'edit') {
+        this.api.putResume(data, (res) => {
+          if (res.status === 200) {
+            this.$refs.eject.msg('修改成功')
+            setTimeout(() => {
+              this.$router.go(-1)
+            }, 1500)
+          }
+        }, (err) => {
+          this.$refs.eject.errmot(err)
+        })
+        return
+      }
       this.api.postResume(data, (res) => {
         if (res.status === 201) {
           this.$router.go(-1)
@@ -364,7 +379,6 @@ export default {
       files.append('type', 2)
       this.isImg = false
       this.api.uploadImg(files, (res) => {
-        console.log(res)
         this.pushData.attachment.push(res.data.url)
       }, (err) => {
         console.log(err)

@@ -2,13 +2,13 @@
     <div class="upResume">
         <div class="header">
             <div class="imgBox">
-                <img src="@/assets/touxiang.jpg" alt="">
+                <img :src="msgUser.avatar" alt="">
             </div>
             <div class="userInfo">
-                <div class="userName">李晓沫</div>
-                <img src="@/assets/woman.png" alt="">
-                <img src="@/assets/man.png" alt="">
-                <div class="userRig">
+                <div class="userName" v-text="msgUser.name">李晓沫</div>
+                <img v-if="msgUser.gender === 2" src="@/assets/woman.png" alt="">
+                <img v-if="msgUser.gender === 1" src="@/assets/man.png" alt="">
+                <div class="userRig" @click="path(1)">
                     <span>编辑个人信息</span>
                     <img src="@/assets/right.png" alt="">
                 </div>
@@ -17,32 +17,97 @@
         <div class="upBtn">
             <img src="@/assets/top_.png" alt="">
             <span>上传数据文件</span>
-            <input type="file">
+            <input type="file" @change="fileCangs($event)">
         </div>
         <div class="ttt">
+            <div v-text="uptext"></div>
+            <div v-text="fileName"></div>
+            <div v-text="fileSize"></div>
             <div class="ind">
-                <div></div>
+                <div :style="'width:' + complete + '%;'"></div>
             </div>
-            <span>上传中</span>
+            <!-- <span v-text="uptext"></span> -->
         </div>
         <div class="btns">
             <button class="qx">取消</button>
-            <button class="qr">确认上传</button>
+            <button class="qr" v-if="upz" @click="putFile">确认上传</button>
+            <button class="qrs" v-else disabled>确认上传</button>
         </div>
+        <Eject ref="eject" />
     </div>
 </template>
 
 <script>
+import httpAjax from 'axios'
+
 export default {
   name: 'upResume',
   data () {
     return {
+      complete: 0,
+      ent: null,
+      msgUser: {},
+      uptext: '请选择',
+      upz: false,
+      fileName: '',
+      fileSize: ''
     }
   },
   methods: {
+    fileCangs (e) {
+      if (e.target.files[0].size === 0) {
+        this.$refs.eject.msg('目标为空文件')
+        return
+      }
+      this.ent = e
+      this.uptext = '点击确认上传'
+      this.upz = true
+      let size = ''
+      if (parseInt(e.target.files[0].size) > 1024) {
+        size = (parseInt(e.target.files[0].size)/1024).toFixed(2) + ' K'
+      } else {
+        size = e.target.files[0].size + ' B'
+      }
+      this.fileName = e.target.files[0].name
+      this.fileSize = '大小：' + size
+      console.log(e.target.files[0])
+    },
+    path (num) {
+      this.$router.push('userInfo')
+    },
+    putFile () {
+      let obj = new FormData()
+      let e = this.ent
+      let _this = this
+      this.uptext = '上传中'
+      this.complete = 0
+      obj.append('resume_file', e.target.files[0])
+      let config = {
+        onUploadProgress: progressEvent => {
+          var complete = (progressEvent.loaded / progressEvent.total * 100 | 0)
+          _this.complete = complete
+        }
+      }
+      httpAjax.post('/api/resume_file/', obj, config).then((res) => {
+        this.uptext = '完成'
+        if (res.status === 201) {
+          this.$refs.eject.msg('简历上传成功 1S 后返回上一层')
+          setTimeout(() => {
+            this.$router.go(-1)
+          }, 1000)
+        }
+      }, (err) => {
+        this.$refs.eject.errmot(err.response)
+      })
+    }
   },
   mounted () {
     document.title = '上传简历'
+    this.api.MyResumeFile((res) => {
+      this.msgUser = res.data[0].user
+    }, (err) => {
+      this.$refs.eject.errmot(err)
+    })
   }
 }
 </script>
@@ -131,25 +196,37 @@ export default {
     opacity: 0;
 }
 .ttt{
-    display: flex;
-    margin:32px auto 0;
-    width:212px;
+    /* display: flex; */
+    margin:20px auto 0;
+    color:rgba(140, 140, 140, 1);
+    width:200px;
+    line-height: 30px;
+    font-size: 14px;
+}
+.ttt>div{
+    width:100%;
 }
 .ttt>.ind{
     align-self: center;
-    width:162px;
+    width:200px;
+    height:6px;
+    border-radius: 8px;
+    border:1px solid rgba(255, 152, 0, 1);
+    margin:4px 0;
+}
+.ttt>.ind>div{
+    transition: .1s ease;
     height:6px;
     border-radius: 8px;
     background:rgba(255, 152, 0, 1);
-    margin:4px 0;
 }
-.ttt>span{
+/* .ttt>span{
     line-height: 14px;
     font-size: 14px;
     color:rgba(140, 140, 140, 1);
     margin-left:5px;
     vertical-align: top;
-}
+} */
 .btns{
     position: fixed;
     width:375px;
@@ -180,5 +257,11 @@ export default {
     border-radius: 30px;
     border:none;
     color:#fff;
+}
+.btns>.qrs{
+    background:rgba(241, 241, 241, 1);
+    border-radius: 30px;
+    border:none;
+    color:#101010;
 }
 </style>

@@ -4,20 +4,27 @@
         <div class="header">
             <div class="imgBBs">
                 <div class="imgBox">
-                    <img class="tou" src="@/assets/touxiang.jpg" alt="">
+                    <img class="tou" :src="msg.user.avatar || ''" alt="">
                 </div>
-                <img class="xb" src="@/assets/woman.png" alt="">
-                <img class="xb" src="@/assets/man.png" alt="">
+                <img class="xb" v-if="msg.user.gender === 1" src="@/assets/woman.png" alt="">
+                <img class="xb" v-else src="@/assets/man.png" alt="">
             </div>
-            <div class="nameAge">李筱沫26岁</div>
-            <div class="pos">此处显示期望职位 | n年工作经验</div>
+            <div class="nameAge">
+                <span v-text="msg.user.name"></span>
+                <span v-text="msg.user.age > 0 ? msg.user.age + '岁' : ''"></span>
+            </div>
+            <div class="pos">
+                <span v-text="msg.position"></span>
+                <span>|</span>
+                <span v-text="msg.user.work_years !== '未填写' ? msg.user.work_years + '年工作经验' : '未填写'"></span>
+            </div>
         </div>
         <div class="conts">
             <div class="CoTitle">
                 <span class="tiLef">我的优势</span>
             </div>
             <div class="contCont">
-                <div class="inner color101010">此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容</div>
+                <div class="inner color101010" v-text="msg.advantage"></div>
             </div>
         </div>
         <div class="conts">
@@ -25,24 +32,16 @@
                 <span class="tiLef">工作经历</span>
             </div>
             <div class="contCont">
-                <div class="forsss">
+                <div class="forsss" v-for="(item, index) in msg.work_history" :key="index">
                     <div class="comInfo">
-                        <span class="comName">此处显示公司名称</span>
-                        <span class="comDate color888">此处显示起止时间</span>
+                        <span class="comName" v-text="item.comName">此处显示公司名称</span>
+                        <span class="comDate color888" v-text="item.riseDate + ' 至 ' + item.stopDate">此处显示起止时间</span>
                     </div>
-                    <div class="comPosition color888">此处显示职位名称</div>
-                    <div class="inner color101010">此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容</div>
-                </div>
-                <div class="forsss">
-                    <div class="comInfo">
-                        <span class="comName">此处显示公司名称</span>
-                        <span class="comDate color888">此处显示起止时间</span>
-                    </div>
-                    <div class="comPosition color888">此处显示职位名称</div>
-                    <div class="inner color101010">此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容此处显示内容</div>
+                    <div class="comPosition color888" v-text="item.positionName">此处显示职位名称</div>
+                    <div class="inner color101010" v-text="item.yous"></div>
                 </div>
             </div>
-            <div class="jingli colorff9800">
+            <div class="jingli colorff9800" v-if="gzjl.length > 1" @click="zk">
                 <span>展开全部工作经历</span>
                 <img src="@/assets/bom1s.png" alt="">
             </div>
@@ -52,27 +51,26 @@
                 <span class="tiLef">教育经历</span>
             </div>
             <div class="contCont">
-                <div class="forsss">
+                <div class="forsss" v-for="(item, index) in msg.edu_history" :key="index">
                     <div class="comInfo">
-                        <span class="comNames">哈尔滨石油学院</span>
-                        <span class="comDate">此处显示起止时间</span>
+                        <span class="comNames" v-text="item.hisName"></span>
+                        <span class="comDate" v-text="item.riseDate + ' 至 ' + item.stopDate"></span>
                     </div>
-                    <div class="comPosition">本科 · 电子信息工程</div>
+                    <div class="comPosition" v-text="item.hisXl + ' · ' + item.hisz">本科 · 电子信息工程</div>
                 </div>
             </div>
         </div>
-        <div class="conts">
+        <div class="conts" v-if="msg.attachment.length > 0">
             <div class="CoTitle">
                 <span class="tiLef">附件</span>
             </div>
             <div class="contCont">
-                <img src="@/assets/touxiang.jpg" alt="">
-                <img src="@/assets/touxiang.jpg" alt="">
+                <img v-for="(item, index) in msg.attachment" :key="index" :src="item" alt="">
             </div>
         </div>
         <div style="height:80px;"></div>
         <div class="btnBox">
-            <button>编辑简历</button>
+            <button @click="path('edit')">编辑简历</button>
         </div>
     </div>
 </template>
@@ -82,13 +80,41 @@ export default {
   name: 'myResume',
   data () {
     return {
-      areaIner: ''
+      areaIner: '',
+      msg: {
+        user: {},
+        attachment: []
+      },
+      gzjl: []
     }
   },
   methods: {
+    zk () {
+      this.msg.work_history = JSON.parse(JSON.stringify(this.gzjl))
+    },
+    path (typ) {
+      switch (typ) {
+        case 'edit':
+          this.$router.push({name: 'newResume', query: {typ: 'edit'}})
+          break
+      }
+    }
   },
   mounted () {
     document.title = '我的微简历'
+    this.api.MyResume((res) => {
+      console.log(res)
+      let arr = []
+      res.data.attachment = JSON.parse(res.data.attachment)
+      res.data.edu_history = JSON.parse(res.data.edu_history)
+      res.data.work_history = JSON.parse(res.data.work_history)
+      this.gzjl = JSON.parse(JSON.stringify(res.data.work_history))
+      arr.push(res.data.work_history[0])
+      res.data.work_history = arr
+      this.msg = res.data
+    }, (err) => {
+      console.log(err)
+    })
   }
 }
 </script>

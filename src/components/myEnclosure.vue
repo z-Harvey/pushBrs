@@ -4,22 +4,32 @@
         <div class="header">
             <div class="imgBBs">
                 <div class="imgBox">
-                    <img class="tou" src="@/assets/touxiang.jpg" alt="">
+                    <img class="tou" :src="msg.user.avatar" alt="">
                 </div>
-                <img class="xb" src="@/assets/woman.png" alt="">
-                <img class="xb" src="@/assets/man.png" alt="">
+                <img class="xb" v-if="msg.user.gender === 2" src="@/assets/woman.png" alt="">
+                <img class="xb" v-if="msg.user.gender === 1" src="@/assets/man.png" alt="">
             </div>
-            <div class="nameAge">李筱沫 26岁</div>
-            <div class="pos">此处显示期望职位 | n年工作经验</div>
+            <div class="nameAge">
+                <span v-text="msg.user.name"></span>
+                <span v-text="msg.user.age === '未填写' ? '' : ' ' + msg.user.age + '岁'"></span>
+            </div>
+            <div class="pos">
+                <span v-text="msg.user.position"></span>
+                <span> | </span>
+                <span v-text="msg.user.work_years === '未填写' ? msg.user.work_years : msg.user.work_years + '年工作经验'"></span>
+            </div>
         </div>
-        <img class="imgss" src="@/assets/PDF.png" alt="">
-        <div class="enName">XXX-XXX-XXX.pdf</div>
+        <img class="imgss" v-if="fileTyp == 'PDF' || fileTyp == 'pdf'" src="@/assets/PDF.png" alt="">
+        <img class="imgss" v-if="fileTyp == 'PPT' || fileTyp == 'ppt' || fileTyp == 'PPTX' || fileTyp == 'pptx'" src="@/assets/PPT.png" alt="">
+        <img class="imgss" v-if="fileTyp == 'DOC' || fileTyp == 'DOCX' || fileTyp == 'doc' || fileTyp == 'docx'" src="@/assets/word.png" alt="">
+        <div class="enName" v-text="msg.file_name">XXX-XXX-XXX.pdf</div>
         <div class="enSize">999KB</div>
-        <div class="upDate">YYYY/MM/DD HH:MM 上传</div>
+        <div class="upDate" v-text="msg.add_time + '上传'"></div>
         <div class="btnBox">
             <button class="b1">删除附件</button>
-            <button class="b2">重新上传</button>
+            <button class="b2" @click="cc">重新上传</button>
         </div>
+        <Eject ref="eject" />
     </div>
 </template>
 
@@ -28,13 +38,27 @@ export default {
   name: 'myEnclosure',
   data () {
     return {
-      areaIner: ''
+      areaIner: '',
+      msg: {
+        user: {}
+      },
+      fileTyp: ''
     }
   },
   methods: {
+    cc () {
+      this.$router.push('upResume')
+    }
   },
   mounted () {
     document.title = '我的微简历'
+    this.api.MyResumeFile((res) => {
+      let arr = res.data[0].resume_file.split('.')
+      this.fileTyp = arr[arr.length - 1]
+      this.msg = res.data[0]
+    }, (err) => {
+      this.$refs.eject.errmot(err)
+    })
   }
 }
 </script>

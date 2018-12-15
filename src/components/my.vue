@@ -4,80 +4,82 @@
             <img src="@/assets/login_bg.png" alt="">
             <div class="imgBox">
                 <div>
-                    <img src="@/assets/touxiang.jpg" alt="">
+                    <img :src="msg.avatar" alt="">
                 </div>
             </div>
+            <div class="userName" v-text="msg.name"></div>
         </div>
         <div class="navRow">
-            <div class="naLi">
+            <div class="naLi" @click="path(0)">
                 <div class="navRImg">
                     <img src="@/assets/pick_a.png" alt="">
-                    <div class="naTag">00</div>
+                    <div class="naTag" v-text="msg.apply_count">00</div>
                 </div>
                 <div>全部投递</div>
             </div>
-            <div class="naLi">
+            <div class="naLi" @click="path(1)">
                 <div class="navRImg">
                     <img src="@/assets/feedback_a.png" alt="">
-                    <div class="naTag">00</div>
+                    <div class="naTag" v-text="msg.dfk_count">00</div>
                 </div>
                 <div>待反馈</div>
             </div>
-            <div class="naLi">
+            <div class="naLi" @click="path(2)">
                 <div class="navRImg">
                     <img src="@/assets/Interview_a.png" alt="">
-                    <div class="naTag">00</div>
+                    <div class="naTag" v-text="msg.dms_count">00</div>
                 </div>
                 <div>待面试</div>
             </div>
-            <div class="naLi">
+            <div class="naLi" @click="path(3)">
                 <div class="navRImg">
                     <img src="@/assets/yes_a.png" alt="">
-                    <div class="naTag">00</div>
+                    <div class="naTag" v-text="msg.ywc_count">00</div>
                 </div>
                 <div>已完成</div>
             </div>
         </div>
-        <div class="ulList">
+        <div class="ulList" @click="path(4)">
             <div class="uLef color2c2c2c">
                 <img src="@/assets/resume.png" alt="">
                 <span class="color2c2c2c">我的微简历</span>
             </div>
             <div class="uRig">
-                <span class="color888">完成度80%</span>
+                <span class="color888" v-text="'完成度' + msg.resume_completion + '%'">80%</span>
                 <img src="@/assets/right.png" alt="">
             </div>
         </div>
-        <div class="ulList">
+        <div class="ulList" @click="path(5)">
             <div class="uLef color2c2c2c">
                 <img src="@/assets/file.png" alt="">
                 <span class="color2c2c2c">简历附件</span>
             </div>
             <div class="uRig">
-                <span class="color888">已上传</span>
+                <span class="color888" v-text="msg.resume_file_status">已上传</span>
                 <img src="@/assets/right.png" alt="">
             </div>
         </div>
-        <div class="ulList">
+        <div class="ulList" @click="path(6)">
             <div class="uLef color2c2c2c">
                 <img src="@/assets/my_demand.png" alt="">
                 <span class="color2c2c2c">求职意向</span>
             </div>
             <div class="uRig">
-                <span class="color888">离职-随时到岗</span>
+                <span class="color888" v-text="jobArr[msg.job_status - 1]">离职-随时到岗</span>
                 <img src="@/assets/right.png" alt="">
             </div>
         </div>
-        <div class="ulList">
+        <div class="ulList" @click="path(7)">
             <div class="uLef color2c2c2c">
                 <img src="@/assets/profile.png" alt="">
-                <span class="color2c2c2c">我的微简历</span>
+                <span class="color2c2c2c">个人信息</span>
             </div>
             <div class="uRig">
-                <span class="color888">完成度80%</span>
+                <span class="color888" v-text="'完成度' + msg.user_completion + '%'">完成度80%</span>
                 <img src="@/assets/right.png" alt="">
             </div>
         </div>
+        <Eject ref="eject" />
     </div>
 </template>
 
@@ -86,10 +88,59 @@ export default {
   name: 'my',
   data () {
     return {
-      areaIner: ''
+      areaIner: '',
+      jobArr: ['离职-随时到岗', '在职-暂不考虑', '在职-考虑机会', '在职-月内到岗'],
+      msg: {
+        apply_count: 0, // 投递数
+        avatar: '', // 头像
+        job_status: 0, // 工作状态
+        name: '', // 用户名
+        resume_completion: 0, // 简历完成度
+        resume_file_status: '', // 简历是否上传
+        user_completion: 0 // 用户完成度
+      }
     }
   },
   methods: {
+    init () {
+      this.api.myInfo((res) => {
+        this.msg = res.data
+      }, (err) => {
+        this.$refs.eject.errmot(err)
+      })
+    },
+    path (num) {
+      switch (num) {
+        case 0:
+          this.$router.push({name: 'myDelivery', query: {navTag: ''}})
+          break
+        case 1:
+          this.$router.push({name: 'myDelivery', query: {navTag: 0}})
+          break
+        case 2:
+          this.$router.push({name: 'myDelivery', query: {navTag: 1}})
+          break
+        case 3:
+          this.$router.push({name: 'myDelivery', query: {navTag: 2}})
+          break
+        case 4:
+          this.$router.push({name: 'myResume', query: {navTag: 2}})
+          break
+        case 5:
+          if (this.msg.resume_file_status === '未上传') {
+            this.$router.push({name: 'upResume'})
+          } else {
+            this.$router.push({name: 'myEnclosure', query: {navTag: 2}})
+          }
+          break
+        case 6:
+        //   this.$router.push({name: 'myResume', query: {navTag: 2}})
+          break
+        case 7:
+          this.$router.push('userInfo')
+          break
+      }
+    }
   },
   mounted () {
     document.title = '我'
@@ -106,6 +157,11 @@ export default {
     left:calc(50% - 187.5px);
     overflow: auto;
     background: rgba(240, 239, 245, 1);
+}
+.userName{
+    color:#fff;
+    font-size: 14px;
+    margin-top:9px;
 }
 .color888{
     color:#888;

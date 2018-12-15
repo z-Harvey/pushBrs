@@ -202,6 +202,7 @@ export default {
           this.toList2 = res.data
         }
       }, (err) => {
+        console.log(err)
         // this.$refs.eject.errmot(err)
       })
     },
@@ -217,6 +218,7 @@ export default {
         })
         this.cs1 = res.data
       }, (err) => {
+        console.log(err)
         // this.$refs.eject.errmot(err)
       })
     },
@@ -242,6 +244,7 @@ export default {
         this.cs2 = res.data
         this.cs2cos[item.id] = this.cs2
       }, (err) => {
+        console.log(err)
         // this.$refs.eject.errmot(err)
       })
     },
@@ -275,6 +278,7 @@ export default {
         this.cs3 = res.data
         this.cs3cos[item.id] = this.cs3
       }, (err) => {
+        console.log(err)
         // this.$refs.eject.errmot(err)
       })
     },

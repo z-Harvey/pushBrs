@@ -65,7 +65,7 @@ export default {
       this.show = true
       this.msgs.text = obj
       this.msgs.msgTr = true
-      this.initScorll()
+    //   this.initScorll()
       setTimeout(() => {
         this.msgs.msgTr = false
         this.show = false

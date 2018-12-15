@@ -1,6 +1,7 @@
 <script>
 let userInfo = {} // 用户基本信息
 let userStatus = {} // 用户状态信息
+let navStatus = [true, false] // 首页导航状态
 let HTTPStatusCode = {
   400: '错误请求',
   401: '未授权',
@@ -43,7 +44,8 @@ let HTTPStatusCode = {
 export default{
   userInfo,
   userStatus,
-  HTTPStatusCode
+  HTTPStatusCode,
+  navStatus
   // glFn
 }
 </script>

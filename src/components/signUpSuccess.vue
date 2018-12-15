@@ -3,8 +3,8 @@
         <img class="yesImg" src="@/assets/yes.png" alt="">
         <div class="tit">投递成功</div>
         <div class="cont">成功投递简历~有任何反馈我们将会第一时间通知您~</div>
-        <button class="yes">查看我的投递</button>
-        <button class="no">返回职位列表</button>
+        <button class="yes" @click="path(1)">查看我的投递</button>
+        <button class="no" @click="path(2)">返回职位列表</button>
     </div>
 </template>
 
@@ -16,6 +16,16 @@ export default {
     }
   },
   methods: {
+    path (num) {
+      switch (num) {
+        case 1:
+          this.$router.push({name: 'myDelivery', query: {navTag: ''}})
+          break
+        case 2:
+          this.$router.go(-2)
+          break
+      }
+    }
   },
   mounted () {
     document.title = '提示'
