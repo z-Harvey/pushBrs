@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import 'lib-flexible/flexible'
-import wx from 'wx'
+import wx from 'weixin-js-sdk'
 
 import Global from './Global' // 全局参数
 import api from './api' // api接口

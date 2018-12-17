@@ -15,11 +15,19 @@ export default {
         appId: data.data.appid, // 必填，公众号的唯一标识
         timestamp: data.data.timestamp, // 必填，生成签名的时间戳
         nonceStr: data.data.nonceStr, // 必填，生成签名的随机串
-        signature: data.data.signature,// 必填，签名
-        jsApiList: [updateAppMessageShareData] // 必填，需要使用的JS接口列表
+        signature: data.data.signature, // 必填，签名
+        jsApiList: [ 'checkJsApi', 'startRecord', 'stopRecord','translateVoice','scanQRCode', 'openCard' ] // 必填，需要使用的JS接口列表
       })
       this.wx.ready((res) => {   //需在用户可能点击分享按钮前就先调用
-        console.log('微信JSSDK：', res)
+        this.wx.updateAppMessageShareData({ 
+          title: '标题', // 分享标题
+          desc: '描述', // 分享描述
+          link: 'tt.xiaoshouniu.cn', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: '图片', // 分享图标
+          success: function () {
+            // 设置成功
+          }
+        })
       })
       this.wx.error((err) => {
         console.log(err)

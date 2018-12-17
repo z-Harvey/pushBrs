@@ -46,7 +46,7 @@
         </div>
         <div class="btnBox" v-else>
             <button class="bt1">职位信息</button>
-            <button class="bt2" href="tel:18210245752"><a>电话沟通</a></button>
+            <a class="bt2" href="tel:18210245752">电话沟通</a>
         </div>
         </div>
     </div>
@@ -239,6 +239,18 @@ export default {
     height:35px;
     font-size: 14px;
     border-radius: 30px;
+}
+.btnBox>a{
+    align-self: center;
+    width:165px;
+    height:35px;
+    font-size: 14px;
+    border-radius: 30px;
+    background:rgba(255, 152, 0, 1);
+    border:none;
+    color:#fff;
+    line-height: 35px;
+    text-decoration:none;
 }
 .btnBox>.bt1{
     border:1px solid rgba(255, 152, 0, 1);
