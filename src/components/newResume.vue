@@ -8,7 +8,7 @@
                 <div class="userName" v-text="pushData.user.name">李晓沫</div>
                 <img v-if="pushData.user === 2" src="@/assets/woman.png" alt="">
                 <img v-else src="@/assets/man.png" alt="">
-                <div class="userRig">
+                <div class="userRig" @click="path(1)">
                     <span>编辑个人信息</span>
                     <img src="@/assets/right.png" alt="">
                 </div>
@@ -98,7 +98,7 @@
                     </div>
                     <div class="areas">
                         <textarea maxlength="200" v-model="item.jing" placeholder="在校经历"></textarea>
-                        <div class="jis color888">0/300</div>
+                        <div class="jis color888" v-text="item.jing.length + '/300'"></div>
                     </div>
                 </div>
                 <div class="bewBtn color888" @click="pushArr(2)">+ 新增教育经历</div>
@@ -178,6 +178,13 @@ export default {
     }
   },
   methods: {
+    path (num) {
+      switch (num) {
+        case 1:
+          this.$router.push('userInfo')
+          break
+      }
+    },
     init () {
       this.api.getResumeInit(this.que.id, (res) => {
         if (res.data.attachment === '') {
@@ -417,9 +424,6 @@ export default {
             success: (res) => {
               this.job_status = res.name
               this.pushData.job_status = res.id
-            },
-            fail: (res) => {
-              console.log(res)
             }
           })
           break

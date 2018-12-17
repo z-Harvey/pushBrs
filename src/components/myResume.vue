@@ -103,7 +103,6 @@ export default {
   mounted () {
     document.title = '我的微简历'
     this.api.MyResume((res) => {
-      console.log(res)
       let arr = []
       res.data.attachment = JSON.parse(res.data.attachment)
       res.data.edu_history = JSON.parse(res.data.edu_history)

@@ -47,7 +47,6 @@ export default {
   methods: {
     init (id) {
       this.api.companySdyz(id, (res) => {
-        console.log(res)
         this.msg = res.data
       }, (err) => {
         console.log(err)

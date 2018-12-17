@@ -47,7 +47,7 @@ export default {
       complete: 0,
       ent: null,
       msgUser: {},
-      uptext: '请选择',
+      uptext: '目前支持上传：word、pdf、ppt格式的文件',
       upz: false,
       fileName: '',
       fileSize: ''
@@ -59,18 +59,29 @@ export default {
         this.$refs.eject.msg('目标为空文件')
         return
       }
+      let arr = ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'PDF', 'DOC', 'DOCX', 'PPT', 'PPTX']
+      let ty = e.target.files[0].name.split('.')[1]
+      let keyi = false
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] === ty) {
+          keyi = true
+        }
+      }
+      if (!keyi) {
+        this.$refs.eject.msg('请选择正确文件格式')
+        return
+      }
       this.ent = e
       this.uptext = '点击确认上传'
       this.upz = true
       let size = ''
       if (parseInt(e.target.files[0].size) > 1024) {
-        size = (parseInt(e.target.files[0].size)/1024).toFixed(2) + ' K'
+        size = (parseInt(e.target.files[0].size) / 1024).toFixed(2) + ' K'
       } else {
         size = e.target.files[0].size + ' B'
       }
       this.fileName = e.target.files[0].name
       this.fileSize = '大小：' + size
-      console.log(e.target.files[0])
     },
     path (num) {
       this.$router.push('userInfo')
@@ -103,8 +114,9 @@ export default {
   },
   mounted () {
     document.title = '上传简历'
-    this.api.MyResumeFile((res) => {
-      this.msgUser = res.data[0].user
+    this.api.getuserInfo((res) => {
+      console.log(res)
+      this.msgUser = res.data
     }, (err) => {
       this.$refs.eject.errmot(err)
     })
@@ -199,7 +211,6 @@ export default {
     /* display: flex; */
     margin:20px auto 0;
     color:rgba(140, 140, 140, 1);
-    width:200px;
     line-height: 30px;
     font-size: 14px;
 }
@@ -212,7 +223,7 @@ export default {
     height:6px;
     border-radius: 8px;
     border:1px solid rgba(255, 152, 0, 1);
-    margin:4px 0;
+    margin:4px auto;
 }
 .ttt>.ind>div{
     transition: .1s ease;

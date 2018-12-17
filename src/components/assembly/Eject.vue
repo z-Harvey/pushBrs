@@ -3,7 +3,7 @@
         <div class="msg" :class="['msg', msgs.msgTr? 'show': 'hid']" v-show="msgs.msgTr" v-text="msgs.text"></div>
         <div class="dialogs" v-show="dialogs.dialogsTr">
             <div class="title" v-text="dialogs.text.title"></div>
-            <img class="X" src="@/assets/x.png" @click="close" alt="">
+            <img class="X" src="@/assets/x.png" @click="imgclose" alt="">
             <div class="content" v-text="dialogs.text.content" ref="eje"></div>
             <div class="btnsBox">
                 <div class="btnsy" v-show="dialogs.text.btns === 'y'">
@@ -45,6 +45,11 @@ export default {
     }
   },
   methods: {
+    imgclose () {
+      this.msgs.msgTr = false
+      this.dialogs.dialogsTr = false
+      this.show = false
+    },
     qd () {
       this.msgs.msgTr = false
       this.dialogs.dialogsTr = false
@@ -65,7 +70,7 @@ export default {
       this.show = true
       this.msgs.text = obj
       this.msgs.msgTr = true
-    //   this.initScorll()
+      // this.initScorll()
       setTimeout(() => {
         this.msgs.msgTr = false
         this.show = false

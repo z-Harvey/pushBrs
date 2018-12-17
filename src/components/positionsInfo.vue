@@ -67,16 +67,22 @@
                 </div>
             </div>
             <div class="jiez" ref="jiez"></div>
+            <div class="yiguanbi" v-if="msg.is_apply === 0 && msg.is_over === 1">职位已关闭</div>
             <div class="footer">
-                <div>
+                <div v-if="msg.is_fav === 0" @click="fav">
                     <img src="@/assets/start.png" alt="">
                     <p>收藏</p>
+                </div>
+                <div v-else @click="fav(1)">
+                    <img src="@/assets/start_a.png" alt="">
+                    <p>已收藏</p>
                 </div>
                 <div>
                     <img src="@/assets/share.png" alt="">
                     <p>分享</p>
                 </div>
-                <button @click="pushResume">投个简历</button>
+                <button v-if="msg.is_apply === 0" @click="pushResume">投个简历</button>
+                <button v-else disabled class="yitoudi">已投递</button>
             </div>
         </div>
         <Eject ref="eject" />
@@ -98,6 +104,27 @@ export default {
     }
   },
   methods: {
+    fav (num) {
+      if (num === 1) {
+        this.api.delectFavPosition(this.msg.id, (res) => {
+          if (res.status === 204) {
+            this.msg.is_fav = 0
+            this.$refs.eject.msg('已取消收藏')
+          }
+        }, (err) => {
+          console.log(err)
+        })
+        return
+      }
+      this.api.postFavPosition({position: this.msg.id}, (res) => {
+        if (res.status === 201) {
+          this.msg.is_fav = 1
+          this.$refs.eject.msg('已收藏')
+        }
+      }, (err) => {
+        console.log(err)
+      })
+    },
     textHid () {
       if (this.$refs.textHid.clientHeight > this.$refs.jiez.clientHeight) {
         this.hidT = true
@@ -211,6 +238,18 @@ export default {
     text-align: left;
     overflow: auto;
 }
+.yiguanbi{
+    position: fixed;
+    bottom: 45px;
+    height:25px;
+    line-height: 25px;
+    font-size: 12px;
+    color:#888;
+    width:100%;
+    left:calc(50% - 187.5);
+    text-align: center;
+    background:rgba(206, 206, 206, .3);
+}
 .positionsInfo>div{
     width: 100%;
     height:100%;
@@ -310,11 +349,15 @@ export default {
     left:calc(50% - 187.5px);
     background:#fff;
 }
+.footer>div>p{
+    line-height: 14px
+}
 .footer>div{
     font-size: 10px;
     color:#101010;
     line-height: 10px;
     padding-top:9px;
+    text-align: center;
 }
 .footer>div>img{
     width:20px;
@@ -332,6 +375,10 @@ export default {
 }
 .footer>button::after{
     border:none;
+}
+.footer>.yitoudi{
+    background: rgba(241, 241, 241, 1);
+    color:#101010;
 }
 .contBox{
     padding:0 15px;

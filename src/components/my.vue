@@ -45,7 +45,7 @@
                 <span class="color2c2c2c">我的微简历</span>
             </div>
             <div class="uRig">
-                <span class="color888" v-text="'完成度' + msg.resume_completion + '%'">80%</span>
+                <span class="color888" v-text="msg.has_resume"></span>
                 <img src="@/assets/right.png" alt="">
             </div>
         </div>
@@ -79,6 +79,17 @@
                 <img src="@/assets/right.png" alt="">
             </div>
         </div>
+        <div class="ulList" @click="path(8)">
+            <div class="uLef color2c2c2c">
+                <img src="@/assets/shouc.png" alt="">
+                <span class="color2c2c2c">职位收藏</span>
+            </div>
+            <div class="uRig">
+                <span class="color888"></span>
+                <img src="@/assets/right.png" alt="">
+            </div>
+        </div>
+        <links ref="links"/>
         <Eject ref="eject" />
     </div>
 </template>
@@ -134,10 +145,37 @@ export default {
           }
           break
         case 6:
-        //   this.$router.push({name: 'myResume', query: {navTag: 2}})
+          this.api.getResumeInit('1', (res) => {
+            this.$refs.links.glink({
+              success: (refData) => {
+                res.data.job_status = refData.id
+                this.msg.job_status = refData.id
+                if (this.msg.has_resume === '已创建') {
+                  this.api.putResume(res.data, (resa) => {
+                    if (resa.status === 200) {
+                      this.$refs.eject.msg('修改成功')
+                    }
+                  }, (err) => {
+                    this.$refs.eject.errmot(err)
+                  })
+                } else if (this.msg.has_resume === '未创建') {
+                  this.api.postResume(res.data, (resa) => {
+                    this.$refs.eject.msg('修改成功')
+                  }, (err) => {
+                    this.$refs.eject.errmot(err)
+                  })
+                }
+              }
+            })
+          }, (err) => {
+            console.log(err)
+          })
           break
         case 7:
           this.$router.push('userInfo')
+          break
+        case 8:
+          this.$router.push('positionCollection')
           break
       }
     }
@@ -261,6 +299,7 @@ export default {
     display: flex;
     line-height: 45px;
     float: right;
+    min-height: 45px;
 }
 .uRig>img{
     width:14px;

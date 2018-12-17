@@ -83,7 +83,6 @@ export default {
       files.append('type', 2)
       this.isImg = false
       this.api.uploadImg(files, (res) => {
-        console.log(res)
         this.postData.avatar = res.data.url
       }, (err) => {
         console.log(err)
@@ -96,7 +95,7 @@ export default {
     gender (num) {
       this.postData.gender = num
     },
-    subMit() {
+    subMit () {
       if (this.postData.name === '' || this.postData.name === null) {
         this.$refs.eject.dialog({
           title: '提示',
@@ -162,9 +161,8 @@ export default {
         return
       }
       this.api.putUserInfo(this.postData, (res) => {
-        console.log(res)
         if (res.status === 200) {
-            this.$router.go(-1)
+          this.$router.go(-1)
         }
       }, (err) => {
         this.$refs.eject.errmot(err)
@@ -186,7 +184,9 @@ export default {
   mounted () {
     document.title = '个人信息'
     this.api.getuserInfo((res) => {
-      res.data.name === '未填写' ? res.data.name = '' : res.data.name
+      if (res.data.name === '未填写') {
+        res.data.name = ''
+      }
       this.postData = res.data
     }, (err) => {
       this.$refs.eject.errmot(err)

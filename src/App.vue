@@ -8,6 +8,24 @@
 <script>
 export default {
   name: 'App',
+  methods: {
+    init (data) {
+      this.wx.config({
+        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        appId: data.data.appid, // 必填，公众号的唯一标识
+        timestamp: data.data.timestamp, // 必填，生成签名的时间戳
+        nonceStr: data.data.nonceStr, // 必填，生成签名的随机串
+        signature: data.data.signature,// 必填，签名
+        jsApiList: [updateAppMessageShareData] // 必填，需要使用的JS接口列表
+      })
+      this.wx.ready((res) => {   //需在用户可能点击分享按钮前就先调用
+        console.log('微信JSSDK：', res)
+      })
+      this.wx.error((err) => {
+        console.log(err)
+      })
+    }
+  },
   mounted () {
     // let r = decodeURI(window.location.search.substr(1))
     // let arr = r.split('&')
@@ -33,7 +51,26 @@ export default {
       this.global.userInfo['token'] = res.data.token
       this.global.userStatus['has_resume'] = res.data.has_resume
       this.global.userStatus['is_user'] = res.data.is_user
-      // this.$router.push({name: 'newResume', query: {id: 2}})
+      if (res.data.has_resume === 0) {
+        this.$refs.eject.dialog({
+          title: '您还没有简历',
+          content: '您可以选择创建微简历或上传简历',
+          btns: 2,
+          yes: '创建微简历',
+          no: '上传简历',
+          success: (res) => {
+            this.$router.push({name: 'newResume', query: {id: 2}})
+          },
+          fail: (res) => {
+            this.$router.push('upResume')
+          }
+        })
+      }
+      this.api.JSSDK((res) => {
+        this.init(res)
+      }, (err) => {
+        console.log(err)
+      })
     }, (err) => {
       this.$refs.eject.errmot(err)
     })

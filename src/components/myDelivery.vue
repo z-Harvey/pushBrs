@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="content">
-            <div class="conFor" v-for="(item, index) in dataList" :key="index">
+            <div class="conFor" v-for="(item, index) in dataList" :key="index" @click="path(item)">
                 <div class="f1">
                     <span class="posName" v-text="item.position_name">职位名称</span>
                     <span class="status colorff9800" v-text="item.status === 0 ? '待反馈' : item.status === 1 ? '代面试' : '已完成'">待反馈</span>
@@ -58,11 +58,13 @@ export default {
       }
       let str = 'status=' + data
       this.api.MyApplyList(str, (res) => {
-        console.log(res)
-        this.dataList = res.data
+        this.dataList = res.data.results
       }, (err) => {
         console.log(err)
       })
+    },
+    path (item) {
+      this.$router.push({name: 'DeliveryInfo', query: {id: item.id}})
     }
   },
   mounted () {

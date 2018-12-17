@@ -7,6 +7,17 @@ const path = '/api'
 let headerToken = (token) => {
   axios.defaults.headers.Authorization = 'JWT ' + token
 }
+
+/**
+ * JSSDK
+ */
+let JSSDK = (success, error) => {
+  axios.get(path + '/JsSignature/?link=' + (Date.parse(new Date()) + 3)).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
 /**
  * 登录 post {code: '1'}
  */
@@ -41,8 +52,8 @@ let register = (data, success, error) => {
 /**
  * 职位列表 get
  */
-let positionList = (success, error) => {
-  axios.get(path + '/position/?link=' + (Date.parse(new Date()) + 3)).then((res) => {
+let positionList = (data, success, error) => {
+  axios.get(path + '/position/?link=' + (Date.parse(new Date()) + 3) + '&' + data).then((res) => {
     success(res)
   }, (err) => {
     error(err.response)
@@ -215,6 +226,16 @@ let MyApplyList = function (data, success, error) {
   })
 }
 /**
+ * 投递详情 id
+ */
+let MyApplyInfo = function (data, success, error) {
+  axios.get(path + '/MyApply/' + data + '/?link=' + (Date.parse(new Date()) + 3)).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
  * 我的微简历 user
  */
 let MyResume = function (success, error) {
@@ -229,6 +250,16 @@ let MyResume = function (success, error) {
  */
 let MyResumeFile = function (success, error) {
   axios.get(path + '/resume_file/?link=' + (Date.parse(new Date()) + 3)).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 删除我的微简历 user
+ */
+let deleteResumeFile = function (success, error) {
+  axios.delete(path + '/resume_file/' + Date.parse(new Date()) + '/?link=' + (Date.parse(new Date()) + 3)).then((res) => {
     success(res)
   }, (err) => {
     error(err.response)
@@ -254,13 +285,48 @@ let putUserInfo = function (data, success, error) {
     error(err.response)
   })
 }
-
+/**
+ * 收藏 {position : id}
+ */
+let postFavPosition = (data, success, error) => {
+  axios.post(path + '/fav_position/', data).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 取消收藏 {position : id}
+ */
+let delectFavPosition = (data, success, error) => {
+  axios.delete(path + '/fav_position/' + data + '/').then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 收藏列表
+ */
+let getFavPosition = function (success, error) {
+  axios.get(path + '/fav_position/?link=' + (Date.parse(new Date()) + 3)).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
 export default{
+  JSSDK,
+  getFavPosition, // 职位收藏
+  postFavPosition, // 收藏
+  delectFavPosition, // 取消收藏
+  deleteResumeFile, // 删除简历附件
   getuserInfo, // 获取个人信息数据
-  putUserInfo, //修改个人信息数据
+  putUserInfo, // 修改个人信息数据
   MyResumeFile, // 我的简历附件
   MyResume, // 我的微简历
   MyApplyList, // 我的投递列表
+  MyApplyInfo, // 投递详情
   login, // 登录
   verifyCode, // 发送验证码
   register, // 注册

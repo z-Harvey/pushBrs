@@ -1,25 +1,26 @@
 <template>
     <div class="positionCollection">
+        <div class="title"><span class="titLef">推荐职位</span><span class="titRig" @click="ged">更多</span></div>
         <div class="contList">
             <div class="contFor" v-for="(item, index) in dataList" :key="index" @click="path(item)">
                 <div class="imgBox">
-                    <img :src="item.position.company.logo" alt="">
+                    <img :src="item.company.logo" alt="">
                 </div>
                 <div class="posInfo">
                     <div>
-                        <div class="posName" v-text="item.position.name"></div>
+                        <div class="posName" v-text="item.name"></div>
                         <div class="wages">
                             <span>薪资</span>
-                            <span class="wage" v-text="' 平均 ' + item.position.mean_salary + ' 最高 ' + item.position.max_salary"></span>
+                            <span class="wage" v-text="' 平均 ' + item.mean_salary + ' 最高 ' + item.max_salary"></span>
                         </div>
                     </div>
                     <div class="tagsBox">
                         <!-- <div>特点一特点一</div> -->
-                        <div v-text="item.position.company.point"></div>
+                        <div v-text="item.company.point"></div>
                     </div>
                     <div class="forFoot">
-                        <span class="nicName" v-text="item.position.company.name"></span>
-                        <span class="diqu" v-text="item.position.area + ' | ' + item.position.industry"></span>
+                        <span class="nicName" v-text="item.company.name"></span>
+                        <span class="diqu" v-text="item.area + ' | ' + item.industry"></span>
                     </div>
                 </div>
             </div>
@@ -33,43 +34,42 @@ export default {
   name: 'positionCollection',
   data () {
     return {
-      dataList: [
-        {
-          position: {
-            company: {logo: ''}
-          }
-        }
-      ]
+      dataList: [{company: {}}],
+      industry: ''
     }
   },
   methods: {
+    ged () {
+      this.global.navStatus = [true, false]
+      this.$router.push('/')
+    },
     path (item) {
-      this.$router.push({name: 'positionsInfo', query: {posId: item.position.id}})
+      this.$router.push({name: 'positionsInfo', query: {posId: item.id}})
+    },
+    init () {
+      let str = 'industry=' + this.industry + '&page_size=6'
+      this.api.positionList(str, (res) => {
+        this.dataList = res.data.results
+        console.log(this.dataList)
+        // this.dataList.map((p1, p2) => {
+        //   p1.company.point = p1.company.point.split('、')
+        // })
+      }, (err) => {
+        console.log(err)
+      })
     }
   },
   mounted () {
     document.title = '职位收藏'
-    this.api.getFavPosition((res) => {
-      console.log(res.data)
-      this.dataList = res.data.results
-    }, (err) => {
-      console.log(err)
-    })
-  }
+    this.init()
+  },
+  props: ['ind']
 }
 </script>
 
 <style scoped>
 .positionCollection{
-    position: fixed;
-    width:375px;
-    height:100%;
-    background: rgba(240, 239, 245, 1);
-    left:calc(50% - 187.5px);
-    overflow: auto;
-}
-.contList{
-    padding-top:10px;
+    padding-top:20px;
 }
 .contFor{
     padding:10px;
@@ -78,6 +78,20 @@ export default {
     background:#fff;
     border-radius: 5px;
     min-height:64px;
+}
+.title{
+    padding:0 15px;
+    height:20px;
+    line-height: 20px;
+    text-align: left;
+    margin-bottom:10px;
+}
+.title>.titLef{
+    font-size: 14px;
+}
+.title>.titRig{
+    font-size: 12px;
+    float: right;
 }
 .blank{
     margin-top:100px;

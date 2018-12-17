@@ -23,10 +23,10 @@
         <img class="imgss" v-if="fileTyp == 'PPT' || fileTyp == 'ppt' || fileTyp == 'PPTX' || fileTyp == 'pptx'" src="@/assets/PPT.png" alt="">
         <img class="imgss" v-if="fileTyp == 'DOC' || fileTyp == 'DOCX' || fileTyp == 'doc' || fileTyp == 'docx'" src="@/assets/word.png" alt="">
         <div class="enName" v-text="msg.file_name">XXX-XXX-XXX.pdf</div>
-        <div class="enSize">999KB</div>
+        <div class="enSize" v-text="msg.file_size + ' KB'"></div>
         <div class="upDate" v-text="msg.add_time + '上传'"></div>
         <div class="btnBox">
-            <button class="b1">删除附件</button>
+            <button class="b1" @click="del">删除附件</button>
             <button class="b2" @click="cc">重新上传</button>
         </div>
         <Eject ref="eject" />
@@ -48,6 +48,24 @@ export default {
   methods: {
     cc () {
       this.$router.push('upResume')
+    },
+    del () {
+      this.$refs.eject.dialog({
+        title: '提示',
+        content: '未选择求职状态',
+        btns: 2,
+        yes: '确认',
+        no: '取消',
+        success: (res) => {
+          this.api.deleteResumeFile((res) => {
+            if (res.status === 204) {
+              this.$router.go(-1)
+            }
+          }, (err) => {
+            console.log(err)
+          })
+        }
+      })
     }
   },
   mounted () {

@@ -2,22 +2,23 @@
     <div class="positionsList">
         <div class="positionsLists"></div>
         <div class="sort">
-            <div>
+            <div @click="sorts(0)">
                 <span>行业</span>
-                <img v-if="sortNav[0]" src="@/assets/sort/lower.png" alt="">
+                <img v-if="sortD[0]" src="@/assets/sort/lower.png" alt="">
                 <img v-else src="@/assets/sort/lower_a.png" alt="">
             </div>
-            <div>
+            <div @click="sorts(1)">
                 <span>城市</span>
-                <img v-if="sortNav[1]" src="@/assets/sort/lower.png" alt="">
+                <img v-if="sortD[1]" src="@/assets/sort/lower.png" alt="">
                 <img v-else src="@/assets/sort/lower_a.png" alt="">
             </div>
-            <div>
+            <div @click="sorts(2)">
                 <span>默认排序</span>
-                <img v-if="sortNav[2]" src="@/assets/sort/lower.png" alt="">
+                <img v-if="sortD[2]" src="@/assets/sort/lower.png" alt="">
                 <img v-else src="@/assets/sort/lower_a.png" alt="">
             </div>
         </div>
+        <img class="blank" v-if="dataList.length === 0" src="@/assets/blank.png" alt="">
         <div class="contList">
             <div class="contFor" v-for="(item, index) in dataList" :key="index" @click="path(item)">
                 <div class="imgBox">
@@ -28,7 +29,7 @@
                         <div class="posName" v-text="item.name">职位名称职位名称职位名称职位名称</div>
                         <div class="wages">
                             <span>薪资</span>
-                            <span class="wage" v-text="'平均 ' + item.max_salary + ' 最高 ' + item.max_salary">平均 4K 最高 10K</span>
+                            <span class="wage" v-text="'平均 ' + item.mean_salary + ' 最高 ' + item.max_salary">平均 4K 最高 10K</span>
                         </div>
                     </div>
                     <div class="tagsBox">
@@ -37,12 +38,13 @@
                     </div>
                     <div class="forFoot">
                         <span class="nicName" v-text="item.company.simple_name">聚牛天下</span>
-                        <span class="diqu" v-text="item.area + '|' + item.industry">北京|行业</span>
+                        <span class="diqu" v-text="item.area + ' | ' + item.industry">北京|行业</span>
                     </div>
                 </div>
             </div>
             <div style="height:80px;"></div>
         </div>
+        <sort ref="sort" :styles="'top:80px;'"/>
     </div>
 </template>
 
@@ -51,17 +53,74 @@ export default {
   name: 'positionsList',
   data () {
     return {
-      sortNav: [false, false, false],
-      dataList: []
+      sortD: [false, false, false],
+      dataList: [],
+      industry: '',
+      area: '',
+      ordering: ''
     }
   },
   methods: {
+    sorts (num) {
+      let arr = [false, false, false]
+      if (this.sortD[num]) {
+        this.sortD = arr
+        this.$refs.sort.close()
+        return
+      }
+      let obj = {}
+      switch (num) {
+        case 0:
+          obj = {
+            type: 3,
+            success: (data) => {
+              this.industry = data
+              this.init()
+            },
+            fail: () => {
+              this.sortD = [false, false, false]
+            }
+          }
+          this.$refs.sort.on_display(obj)
+          break
+        case 1:
+          obj = {
+            type: 31,
+            success: (data) => {
+              this.area = data
+              this.init()
+            },
+            fail: () => {
+              this.sortD = [false, false, false]
+            }
+          }
+          this.$refs.sort.on_display(obj)
+          break
+        case 2:
+          obj = {
+            type: 2,
+            success: (data) => {
+              let arr = ['', '-salary_info__mean_salary', '-salary_info__max_salary']
+              this.ordering = arr[data]
+              this.init()
+            },
+            fail: () => {
+              this.sortD = [false, false, false]
+            }
+          }
+          this.$refs.sort.on_display(obj)
+          break
+      }
+      arr[num] = true
+      this.sortD = arr
+    },
     path (item) {
       this.$router.push({name: 'positionsInfo', query: {posId: item.id}})
     },
     init () {
-      this.api.positionList((res) => {
-        this.dataList = res.data
+      let str = 'ordering=' + this.ordering + '&area=' + this.area + '&industry=' + this.industry
+      this.api.positionList(str, (res) => {
+        this.dataList = res.data.results
         // this.dataList.map((p1, p2) => {
         //   p1.company.point = p1.company.point.split('、')
         // })
@@ -85,6 +144,11 @@ export default {
     background: rgba(240, 239, 245, 1);
     left:calc(50% - 187.5px);
     margin:0 auto;
+}
+.blank{
+    margin-top:100px;
+    width:150px;
+    height:150px;
 }
 .positionsLists{
     position: fixed;
