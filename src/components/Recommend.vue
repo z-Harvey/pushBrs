@@ -48,7 +48,7 @@ export default {
     },
     init () {
       let str = 'industry=' + this.industry + '&page_size=6'
-      this.api.positionList(str, (res) => {
+      this.api.tjPositionList(str, (res) => {
         this.dataList = res.data.results
         console.log(this.dataList)
         // this.dataList.map((p1, p2) => {

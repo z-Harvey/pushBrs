@@ -738,7 +738,7 @@ export default {
     background:#fff;
     display: flex;
     bottom: 0;
-    left:0;
+    left:calc(50% - 187.5px);
 }
 .footerBtn>button{
     align-self: center;

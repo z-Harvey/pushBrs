@@ -58,7 +58,7 @@
                 </div>
             </div>
         </div>
-        <div style="height:100px;"></div>
+        <div style="height:150px;"></div>
         <div class="btnBox">
             <button @click="subMit">保存</button>
         </div>

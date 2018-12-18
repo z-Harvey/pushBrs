@@ -123,6 +123,7 @@ export default {
     width:375px;
     height:100%;
     background: rgba(240, 239, 245, 1);
+    margin:0 auto;
 }
 .myResumes{
     position: fixed;

@@ -317,12 +317,13 @@ export default {
 .linkage{
     position: fixed;
     top: 0;
-    left: 0;
+    left: calc(50% - 187.5px);
     width:375px;
     height:100%;
     z-index: 10;
     background: rgba(0,0,0,.2);
     display: flex;
+    z-index: 9;
 }
 .cont-box{
     width:calc(92% - 20px);

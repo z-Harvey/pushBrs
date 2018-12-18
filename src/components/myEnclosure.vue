@@ -52,7 +52,7 @@ export default {
     del () {
       this.$refs.eject.dialog({
         title: '提示',
-        content: '未选择求职状态',
+        content: '确认删除附件建立？',
         btns: 2,
         yes: '确认',
         no: '取消',

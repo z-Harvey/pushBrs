@@ -5,15 +5,15 @@
         <div class="s2" v-if="msg.type === 2">
             <div @click="s2Clik(0)">
                 <p>默认排序</p>
-                <img v-if="s2[0]" src="@/assets/yes.png" alt="">
+                <img v-if="s2[0]" src="@/assets/yes_b.png" alt="">
             </div>
             <div @click="s2Clik(1)">
                 <p>按平均薪资由高到低</p>
-                <img v-if="s2[1]" src="@/assets/yes.png" alt="">
+                <img v-if="s2[1]" src="@/assets/yes_b.png" alt="">
             </div>
             <div @click="s2Clik(2)">
                 <p>按最高薪资由高到低</p>
-                <img v-if="s2[2]" src="@/assets/yes.png" alt="">
+                <img v-if="s2[2]" src="@/assets/yes_b.png" alt="">
             </div>
         </div>
         <div class="s3" v-if="msg.type === 3">
@@ -21,11 +21,11 @@
                 <div>
                     <div @click="type3Call(qb)">
                         <p>全部</p>
-                        <img v-if="qb.show" src="@/assets/yes.png" alt="">
+                        <img v-if="qb.show" src="@/assets/yes_b.png" alt="">
                     </div>
                     <div v-for="(item, index) in s1List1" :key="index" @click="type3Init(item)">
                         <p v-text="item.name"></p>
-                        <img v-if="item.show" src="@/assets/yes.png" alt="">
+                        <img v-if="item.show" src="@/assets/yes_b.png" alt="">
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                 <div>
                     <div v-for="(item, index) in s1List2" :key="index" @click="type3Call(item)">
                         <p v-text="item.name"></p>
-                        <img v-if="item.show" src="@/assets/yes.png" alt="">
+                        <img v-if="item.show" src="@/assets/yes_b.png" alt="">
                     </div>
                 </div>
             </div>
@@ -43,11 +43,11 @@
                 <div>
                     <div @click="type3Call(qb)">
                         <p>全部</p>
-                        <img v-if="qb.show" src="@/assets/yes.png" alt="">
+                        <img v-if="qb.show" src="@/assets/yes_b.png" alt="">
                     </div>
                     <div v-for="(item, index) in s1List1" :key="index" @click="type31Init(item)">
                         <p v-text="item.name"></p>
-                        <img v-if="item.show" src="@/assets/yes.png" alt="">
+                        <img v-if="item.show" src="@/assets/yes_b.png" alt="">
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                 <div>
                     <div v-for="(item, index) in s1List2" :key="index" @click="type3Call(item)">
                         <p v-text="item.name"></p>
-                        <img v-if="item.show" src="@/assets/yes.png" alt="">
+                        <img v-if="item.show" src="@/assets/yes_b.png" alt="">
                     </div>
                 </div>
             </div>
@@ -193,13 +193,13 @@ export default {
     position: fixed;
     width:375px;
     height:100%;
-    left: calc(50% - 187.5);
-    background: rgba(0,0,0,0);
+    left: calc(50% - 187.5px);
     background:rgba(0,0,0,.2);
+    z-index: 9;
 }
 .Screening{
     position: fixed;
-    left:calc(50% - 187.5);
+    left:calc(50% - 187.5px);
     width:375px;
 }
 .s1{

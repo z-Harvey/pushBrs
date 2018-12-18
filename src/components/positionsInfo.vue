@@ -1,6 +1,6 @@
 <template>
     <div class="positionsInfo">
-        <div>
+        <div class="posiContent">
             <div class="header">
                 <div class="posName">
                     <span class="name" v-text="msg.name">职位名称</span>
@@ -68,6 +68,9 @@
             </div>
             <div class="jiez" ref="jiez"></div>
             <div class="yiguanbi" v-if="msg.is_apply === 0 && msg.is_over === 1">职位已关闭</div>
+            <div class="fen" v-show="fenxianganniu" @click="fenx">
+                <img src="@/assets/storss.png" alt="">
+            </div>
             <div class="footer">
                 <div v-if="msg.is_fav === 0" @click="fav">
                     <img src="@/assets/start.png" alt="">
@@ -77,7 +80,7 @@
                     <img src="@/assets/start_a.png" alt="">
                     <p>已收藏</p>
                 </div>
-                <div>
+                <div @click="fenx">
                     <img src="@/assets/share.png" alt="">
                     <p>分享</p>
                 </div>
@@ -100,10 +103,14 @@ export default {
       msg: {
         company: {},
         salary_info: {}
-      }
+      },
+      fenxianganniu: false
     }
   },
   methods: {
+    fenx () {
+      this.fenxianganniu = !this.fenxianganniu
+    },
     fav (num) {
       if (num === 1) {
         this.api.delectFavPosition(this.msg.id, (res) => {
@@ -144,12 +151,15 @@ export default {
           if (res.data.resume_count === 0) {
             this.$refs.eject.dialog({
               title: '您还没有简历',
-              content: '您可以选择创建微简历或上传简历,您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历您可以选择创建微简历或上传简历',
+              content: '您可以选择创建微简历或上传简历',
               btns: 2,
               no: '上传简历',
               yes: '创建微简历',
               success: () => {
                 this.$router.push({name: 'newResume', query: {id: this.msg.id}})
+              },
+              fail: () => {
+                this.$router.push('upResume')
               }
             })
           } else if (res.data.resume_count === 1) {
@@ -214,9 +224,27 @@ export default {
       this.que = this.$route.query
       this.api.positionInfo(this.que.posId, (res) => {
         this.msg = res.data
+        console.log(res.data)
         this.textHid()
+        this.wxconfig()
       }, (err) => {
         this.$refs.eject.errmot(err)
+      })
+    },
+    wxconfig () {
+      this.api.JSSDK(this, window.location.href.split('#')[0], (res) => {
+        this.api.print({data: this.msg.id}, () => {}, () => {})
+        this.wx.updateAppMessageShareData({
+          title: '我向你分享了 ' + this.msg.industry + ' 职位', // 分享标题
+          desc: '实地考察严选职位', // 分享描述
+          link: 'http://tt.xiaoshouniu.cn/static/jump.html?posId=' + this.msg.id + '&link=' + Date.parse(new Date()), // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl: this.msg.company.logo, // 分享图标
+          success: function (res) {
+            // 设置成功
+          }
+        })
+      }, (err) => {
+        console.log(err)
       })
     }
   },
@@ -238,6 +266,20 @@ export default {
     text-align: left;
     overflow: auto;
 }
+.fen{
+    position: fixed;
+    width:100%;
+    height:100%;
+    left:0;
+    top:0;
+    background:rgba(0,0,0,.2);
+    z-index: 9;
+}
+.fen>img{
+    position: absolute;
+    right:10px;
+    width:100px;
+}
 .yiguanbi{
     position: fixed;
     bottom: 45px;
@@ -246,11 +288,11 @@ export default {
     font-size: 12px;
     color:#888;
     width:100%;
-    left:calc(50% - 187.5);
+    left:calc(50% - 187.5px);
     text-align: center;
     background:rgba(206, 206, 206, .3);
 }
-.positionsInfo>div{
+.positionsInfo>.posiContent{
     width: 100%;
     height:100%;
     padding-bottom: 70px;
@@ -455,9 +497,6 @@ export default {
 .imgBox1>img{
     width:26px;
     height:26px;
-}
-.addrs{
-
 }
 .addrs1{
     font-size: 14px;

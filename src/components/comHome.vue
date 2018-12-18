@@ -21,7 +21,7 @@
                         <div :class="navTag[1]? 'paa': ''"></div>
                     </div>
                     <div @click="navClick(2)">
-                        <p :class="navTag[2]? 'pss': ''" v-text="'再招职位(' + msg.position_count + ')'"></p>
+                        <p :class="navTag[2]? 'pss': ''" v-text="'在招职位(' + msg.position_count + ')'"></p>
                         <div :class="navTag[2]? 'paa': ''"></div>
                     </div>
                 </div>
@@ -91,6 +91,7 @@ export default {
     width: 375px;
     height:100%;
     background:rgba(248, 248, 248, 1);
+    margin: 0 auto;
 }
 .header{
     position: fixed;

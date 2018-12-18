@@ -71,17 +71,21 @@ export default {
   margin:10px auto 0;
 }
 .content{
-  height:112px;
+  min-height:112px;
   overflow-y: hidden;
   overflow-x: auto;
   white-space: nowrap;
-  padding:0 5px;
+  padding:5px 5px;
 }
 .forBox{
   margin:10px 15px 0 0;
   position: relative;
   display: inline-block;
   text-align: center;
+}
+.forBox>p{
+  font-size: 12px;
+  line-height: 20px;
 }
 .title{
   padding:14px 10px;
@@ -92,7 +96,7 @@ export default {
 }
 .imgBox{
   width:70px;
-  height:70px;
+  min-height:70px;
   display: flex;
 }
 .imgBox>img{

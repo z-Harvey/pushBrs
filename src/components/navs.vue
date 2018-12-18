@@ -48,7 +48,6 @@ export default {
   },
   mounted () {
     this.navTar = this.global.navStatus
-    console.log(this.global.userStatus)
     for (let i = 0; i < this.navTar.length; i++) {
       if (this.navTar[i]) {
         this.path(i)

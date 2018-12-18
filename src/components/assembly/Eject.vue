@@ -125,6 +125,7 @@ export default {
     display: flex;
     text-align: center;
     overflow: hidden;
+    z-index: 9;
 }
 .msg{
     padding:10px 15px;

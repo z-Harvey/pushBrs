@@ -29,7 +29,7 @@
             <!-- <span v-text="uptext"></span> -->
         </div>
         <div class="btns">
-            <button class="qx">取消</button>
+            <button class="qx" @click="qxs">取消</button>
             <button class="qr" v-if="upz" @click="putFile">确认上传</button>
             <button class="qrs" v-else disabled>确认上传</button>
         </div>
@@ -54,6 +54,9 @@ export default {
     }
   },
   methods: {
+    qxs () {
+      this.$router.go(-1)
+    },
     fileCangs (e) {
       if (e.target.files[0].size === 0) {
         this.$refs.eject.msg('目标为空文件')
@@ -243,7 +246,7 @@ export default {
     width:375px;
     height:45px;
     bottom: 0px;
-    left:0px;
+    left:calc(50% - 187.5px);
     background:#fff;
     display: flex;
     justify-content: space-around;

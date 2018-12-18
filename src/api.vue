@@ -1,21 +1,49 @@
 <script>
 import axios from 'axios'
 
-// const path = ''
-const path = '/api'
+const path = ''
+// const path = '/api'
 
 let headerToken = (token) => {
   axios.defaults.headers.Authorization = 'JWT ' + token
 }
-
 /**
- * JSSDK
+ * 信息打印
  */
-let JSSDK = (success, error) => {
-  axios.get(path + '/JsSignature/?link=' + (Date.parse(new Date()) + 3)).then((res) => {
+let print = (data, success, error) => {
+  axios.post(path + '/print/?link=' + (Date.parse(new Date()) + 3), data).then((res) => {
     success(res)
   }, (err) => {
     error(err.response)
+  })
+}
+/**
+ * JSSDK
+ */
+let JSSDK = (that, url, success, error) => {
+  axios.post(path + '/JsSignature/?link=' + (Date.parse(new Date()) + 3), {url: url}).then((res) => {
+    wxConfig(that, res, success, error)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * wx config
+ */
+let wxConfig = (that, data, success, error) => {
+  that.wx.config({
+    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+    appId: data.data.appid, // 必填，公众号的唯一标识
+    timestamp: data.data.timestamp, // 必填，生成签名的时间戳
+    nonceStr: data.data.noncestr, // 必填，生成签名的随机串
+    signature: data.data.signature, // 必填，签名
+    jsApiList: [ 'chooseImage', 'updateAppMessageShareData', 'updateTimelineShareData', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone', 'startRecord', 'stopRecord' ] // 必填，需要使用的JS接口列表
+  })
+  that.wx.ready(() => {
+    success('成功')
+  })
+  that.wx.error(() => {
+    error('失败')
   })
 }
 /**
@@ -54,6 +82,16 @@ let register = (data, success, error) => {
  */
 let positionList = (data, success, error) => {
   axios.get(path + '/position/?link=' + (Date.parse(new Date()) + 3) + '&' + data).then((res) => {
+    success(res)
+  }, (err) => {
+    error(err.response)
+  })
+}
+/**
+ * 推荐职位 get
+ */
+let tjPositionList = (data, success, error) => {
+  axios.get(path + '/tj_position/?link=' + (Date.parse(new Date()) + 3) + '&' + data).then((res) => {
     success(res)
   }, (err) => {
     error(err.response)
@@ -317,6 +355,7 @@ let getFavPosition = function (success, error) {
 }
 export default{
   JSSDK,
+  print,
   getFavPosition, // 职位收藏
   postFavPosition, // 收藏
   delectFavPosition, // 取消收藏
@@ -331,6 +370,7 @@ export default{
   verifyCode, // 发送验证码
   register, // 注册
   positionList, // 职位列表
+  tjPositionList, // 推荐职位
   positionInfo, // 职位详情
   companyHeader, // 公司信息 头部
   companyInfo, // 公司信息

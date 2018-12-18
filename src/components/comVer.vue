@@ -8,7 +8,7 @@
                 <span class="tit">验证流程</span>
             </div>
             <div class="imgBox">
-                <img src="@/assets/touxiang.jpg" alt="">
+                <img src="@/assets/yiheliucheng.png" alt="">
             </div>
         </div>
         <div class="contText">
@@ -16,7 +16,7 @@
                 <span class="tit">已核实项目</span>
             </div>
             <div class="imgBox">
-                <img src="@/assets/touxiang.jpg" alt="">
+                <img src="@/assets/yiheshi.png" alt="">
             </div>
         </div>
         <div class="contText">
@@ -26,10 +26,11 @@
             <div class="contBox">
                 <div class="wird">以下资料均由官方专人实地拍摄、整理</div>
                 <div class="comImbs">
-                    <div>公司环境</div>
-                    <img src="@/assets/touxiang.jpg" alt="">
-                    <img src="@/assets/touxiang.jpg" alt="">
-                    <img src="@/assets/touxiang.jpg" alt="">
+                    <div class="real" v-for="(item, index) in msg.real_data" :key="index">
+                        <div v-text="item.title">title</div>
+                        <img v-if="item.type === 1" :src="item.url">
+                        <video v-if="item.type === 2" :src="item.url" preload="auto" x-webkit-airplay="allow" x5-video-player-type="h5" x5-video-player-fullscreen="true" x5-video-orientation="portraint" width="100%" height="260px" webkit-playsinline="true" playsinline="true" autoplay="true" controls="true"></video >
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,6 +49,7 @@ export default {
     init (id) {
       this.api.companySdyz(id, (res) => {
         this.msg = res.data
+        console.log(res.data)
       }, (err) => {
         console.log(err)
       })
@@ -68,6 +70,12 @@ export default {
     text-align: left;
     margin:0 auto;
     margin-top:10px;
+}
+.time>.rig{
+    color:rgba(255, 152, 0, 1);
+    font-size: 12px;
+    line-height: 16px;
+    float: right;
 }
 .tits{
     border-bottom: 1px solid rgba(247, 247, 247, 1);
@@ -98,13 +106,18 @@ export default {
     color:rgba(255, 152, 0, 1);
     font-size: 14px;
 }
-.comImbs>div{
-    font-size: 14px;
-    color:#101010;
-    margin:15px 0 0;
-}
-.comImbs>img{
+.comImbs>.real{
     width:100%;
-    margin-top:10px;
+    margin-bottom: 10px;
+}
+.comImbs>.real>div{
+    font-size: 14px;
+    line-height: 25px;
+}
+.comImbs>.real>img{
+    width:100%;
+}
+.comImbs>.real>video{
+    width:100%;
 }
 </style>

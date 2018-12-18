@@ -42,10 +42,10 @@
         <recommend v-show="appStatus === 3" :ind="ind" ref="recommend"/>
         <div style="height:100px;"></div>
         <div class="btnBox" v-if="appStatus === 0 && appStatus === 3">
-            <button class="bt2">职位信息</button>
+            <button class="bt2" @click="infos">职位信息</button>
         </div>
         <div class="btnBox" v-else>
-            <button class="bt1">职位信息</button>
+            <button class="bt1" @click="infos">职位信息</button>
             <a class="bt2" href="tel:18210245752">电话沟通</a>
         </div>
         </div>
@@ -70,6 +70,10 @@ export default {
     recommend
   },
   methods: {
+    infos () {
+      console.log(this.dataList)
+      this.$router.push({name: 'positionsInfo', query: {posId: this.dataList.position}})
+    },
     init () {
       this.api.MyApplyInfo(this.que.id, (res) => {
         let arr = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十']
@@ -148,6 +152,8 @@ export default {
 }
 .czheng{
     height:100px;
+    width:375px;
+    margin:0 auto;
 }
 .header{
     padding:15px;

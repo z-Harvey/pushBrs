@@ -16,6 +16,7 @@ import DeliveryInfo from '@/components/DeliveryInfo' // 投递详情
 import positionCollection from '@/components/positionCollection' // 职位收藏
 import myResume from '@/components/myResume' // 我的微简历
 import myEnclosure from '@/components/myEnclosure' // 我的微简历  附件
+import JumpHref from '@/components/JumpHref' // 我的微简历  附件
 
 Vue.use(Router)
 
@@ -35,6 +36,7 @@ export default new Router({
     {path: '/DeliveryInfo', name: 'DeliveryInfo', component: DeliveryInfo},
     {path: '/positionCollection', name: 'positionCollection', component: positionCollection},
     {path: '/myResume', name: 'myResume', component: myResume},
+    {path: '/JumpHref', name: 'JumpHref', component: JumpHref},
     {path: '/myEnclosure', name: 'myEnclosure', component: myEnclosure}
   ]
 })
