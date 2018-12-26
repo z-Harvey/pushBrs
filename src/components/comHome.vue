@@ -8,7 +8,7 @@
                 <div class="comName" v-text="msg.name">北京聚牛天下网络科技有限公司</div>
                 <div class="comTag">
                     <!-- <div v-for="(item, index) in msg.point" :key="index" v-text="item">特点一</div> -->
-                    <div v-text="msg.point">特点一</div>
+                    <div v-if="msg.point" v-text="msg.point">特点一</div>
                     <span v-text="msg.position_count + ' 个在招职位'"></span>
                 </div>
                 <div class="navTag">

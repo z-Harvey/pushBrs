@@ -14,7 +14,7 @@
       </div>
       <div class="contentBox">
         <div class="title">企业简介</div>
-        <div class="contents" v-text="msg.desc"></div>
+        <div class="contents" v-html="msg.desc"></div>
       </div>
       <div class="contentBox">
         <div class="title">公司地址</div>
@@ -50,6 +50,8 @@ export default {
     init (id) {
       this.api.companyInfo(id, (res) => {
         console.log(res)
+        res.data.desc = res.data.desc.replace(/=-/g, '<span class="jc">')
+        res.data.desc = res.data.desc.replace(/-=/g, '</span>')
         this.msg = res.data
       }, (err) => {
         console.log(err)
@@ -109,6 +111,9 @@ export default {
   color:#888;
   display: inline-block;
   /* clear: both; */
+}
+.contents>.jc{
+  color:#101010;
 }
 .fors{
   display: flex;

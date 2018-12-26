@@ -135,6 +135,10 @@ export default {
           this.$router.push({name: 'myDelivery', query: {navTag: 2}})
           break
         case 4:
+          if (this.msg.has_resume === '未创建') {
+            this.$router.push('newResume')
+            return
+          }
           this.$router.push({name: 'myResume', query: {navTag: 2}})
           break
         case 5:

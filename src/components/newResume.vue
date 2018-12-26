@@ -71,6 +71,9 @@
                         <textarea maxlength="200" v-model="item.yous" placeholder="工作内容：取得的成绩、实现的突破、获得的表彰，至少填写30个字"></textarea>
                         <div class="jis color888">0/300</div>
                     </div>
+                    <div class="ListDel" v-if="pushData.work_history.length !== 1">
+                      <img src="@/assets/delect.png" @click="delList(0, index)">
+                    </div>
                 </div>
                 <div class="bewBtn color888" @click="pushArr(1)">+ 新增工作经历</div>
             </div>
@@ -99,6 +102,9 @@
                     <div class="areas">
                         <textarea maxlength="200" v-model="item.jing" placeholder="在校经历"></textarea>
                         <div class="jis color888" v-text="item.jing.length + '/300'"></div>
+                    </div>
+                    <div class="ListDel" v-if="pushData.edu_history.length !== 1">
+                      <img src="@/assets/delect.png" @click="delList(1, index)">
                     </div>
                 </div>
                 <div class="bewBtn color888" @click="pushArr(2)">+ 新增教育经历</div>
@@ -178,6 +184,16 @@ export default {
     }
   },
   methods: {
+    delList (ty, num) {
+      switch (ty) {
+        case 0:
+          this.pushData.work_history.splice(num, 1)
+          break
+        case 1:
+          this.pushData.edu_history.splice(num, 1)
+          break
+      }
+    },
     path (num) {
       switch (num) {
         case 1:
@@ -490,6 +506,20 @@ export default {
 .reds{
     color:red;
 }
+.ListDel{
+    width:40px;
+    height:40px;
+    border-radius: 50%;
+    background:rgba(249, 249, 249, 1);
+    display: flex;
+    margin:15px auto;
+}
+.ListDel>img{
+    width:14px;
+    height:14px;
+    margin:0 auto;
+    align-self: center;
+}
 .newResume{
     position: fixed;
     top:0;
@@ -625,8 +655,9 @@ export default {
     height:30px;
     font-size: 14px;
     text-align: right;
-    background: rgba(0, 0, 0, 0);
+    background: #fff;
     border:none;
+    border-radius:3px;
     width: 40%;
 }
 .inpDate>.dataDiv>input::after{

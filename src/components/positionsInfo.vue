@@ -19,7 +19,7 @@
                         <div class="nickName" v-text="msg.company.name">北京聚牛天下网络科技</div>
                         <div class=nickTag>
                             <!-- <div v-for="(item, index) in msg.company.point" :key="index" v-text="item">特点一</div> -->
-                            <div v-text="msg.company.point">特点一</div>
+                            <div v-if="msg.company.point" v-text="msg.company.point">特点一</div>
                             <span v-text="msg.company.position_count + '个在招职位'"></span>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                     </div>
                     <div>
                         <div class="contLe">培训</div>
-                        <div class="contRig" v-text="msg.salary_info.train"></div>
+                        <div class="contRig" v-html="msg.salary_info.train"></div>
                     </div>
                     <div>
                         <div class="contLe">获客支持</div>
@@ -54,7 +54,7 @@
                 <div class="tit">
                     <span class="t">职位描述</span>
                 </div>
-                <div class="contTextHid" :class="hidT? 'hids': ''" v-text="msg.desc" ref="textHid"></div>
+                <div class="contTextHid" :class="hidT? 'hids': ''" v-html="msg.desc" ref="textHid"></div>
                 <div class="hidTbtn" @click="clickHid" v-if="hidTbtn">...<span>显示全部</span></div>
             </div>
             <div class="contBox1">
@@ -71,6 +71,7 @@
             <div class="fen" v-show="fenxianganniu" @click="fenx">
                 <img src="@/assets/storss.png" alt="">
             </div>
+            <div style="height:100px;"></div>
             <div class="footer">
                 <div v-if="msg.is_fav === 0" @click="fav">
                     <img src="@/assets/start.png" alt="">
@@ -224,7 +225,6 @@ export default {
       this.que = this.$route.query
       this.api.positionInfo(this.que.posId, (res) => {
         this.msg = res.data
-        console.log(res.data)
         this.textHid()
         this.wxconfig()
       }, (err) => {

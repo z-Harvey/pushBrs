@@ -102,7 +102,7 @@ export default {
           _this.complete = complete
         }
       }
-      httpAjax.post('/api/resume_file/', obj, config).then((res) => {
+      httpAjax.post('/resume_file/', obj, config).then((res) => {
         this.uptext = '完成'
         if (res.status === 201) {
           this.$refs.eject.msg('简历上传成功 1S 后返回上一层')

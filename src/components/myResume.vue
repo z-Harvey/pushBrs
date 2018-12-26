@@ -6,8 +6,8 @@
                 <div class="imgBox">
                     <img class="tou" :src="msg.user.avatar || ''" alt="">
                 </div>
-                <img class="xb" v-if="msg.user.gender === 1" src="@/assets/woman.png" alt="">
-                <img class="xb" v-else src="@/assets/man.png" alt="">
+                <img class="xb" v-if="msg.user.gender === 2" src="@/assets/woman.png" alt="">
+                <img class="xb" v-if="msg.user.gender === 1" src="@/assets/man.png" alt="">
             </div>
             <div class="nameAge">
                 <span v-text="msg.user.name"></span>

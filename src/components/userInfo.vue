@@ -291,10 +291,15 @@ export default {
 }
 .dateBox>input{
     width: 100%;
+    min-width: 200px;
     height:30px;
     font-size: 14px;
     border:none;
-    text-indent: 5px
+    text-indent: 5px;
+    background:#fff;
+}
+.dateBox>input[type='date']::-webkit-calendar-picker-indicator{
+    -webkit-appearance:none;
 }
 .dateBox>input::after{
     border:none;

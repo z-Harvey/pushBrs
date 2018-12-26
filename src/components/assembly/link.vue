@@ -1,9 +1,9 @@
 <template>
-   <div class="linkage" v-if="show">
+   <div class="linkage" v-if="show" @click.stop="close()">
         <div class="cont-box">
             <div class="cont-content" v-show="glinks === 1">
                 <div class="ons">
-                    <div v-for="(item, index) in ons" :key="index" @click="clickList(item)">
+                    <div v-for="(item, index) in ons" :key="index" @click.stop="clickList(item)">
                         <p v-text="item.name">sss</p>
                         <div class="imgBox">
                             <img v-if="item.show" src="@/assets/yes_b.png" alt="">
@@ -13,7 +13,7 @@
             </div>
             <div class="cont-content" v-if="msg.type === 'cs'">
                 <div>
-                    <div v-for="(item, index) in cs1" :key="index" @click="cs2s(item)">
+                    <div v-for="(item, index) in cs1" :key="index" @click.stop="cs2s(item)">
                         <p v-text="item.name"></p>
                         <div class="imgBox">
                             <img v-if="item.show" src="@/assets/yes_b.png" alt="">
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div>
-                    <div v-for="(item, index) in cs2" :key="index" @click="cs3s(item)">
+                    <div v-for="(item, index) in cs2" :key="index" @click.stop="cs3s(item)">
                         <p v-text="item.name"></p>
                         <div class="imgBox">
                             <img v-if="item.show" src="@/assets/yes_b.png" alt="">
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div>
-                    <div v-for="(item, index) in cs3" :key="index" @click="csqr(item)">
+                    <div v-for="(item, index) in cs3" :key="index" @click.stop="csqr(item)">
                         <p v-text="item.name"></p>
                         <div class="imgBox">
                             <img v-if="item.show" src="@/assets/yes_b.png" alt="">
@@ -39,7 +39,7 @@
             </div>
             <div class="cont-content" v-else-if="glinks !== 1">
                 <div>
-                    <div v-for="(item, index) in toList1" :key="index" @click="hangye(item)">
+                    <div v-for="(item, index) in toList1" :key="index" @click.stop="hangye(item)">
                         <p v-text="item.name"></p>
                         <div class="imgBox">
                             <img v-if="item.show" src="@/assets/yes_b.png" alt="">
@@ -47,7 +47,7 @@
                     </div>
                 </div>
                 <div>
-                    <div v-for="(item, index) in toList2" :key="index" @click="to2Click(item)">
+                    <div v-for="(item, index) in toList2" :key="index" @click.stop="to2Click(item)">
                         <p v-text="item.name"></p>
                         <div class="imgBox">
                             <img v-if="item.show" src="@/assets/yes_b.png" alt="">
@@ -55,10 +55,10 @@
                     </div>
                 </div>
             </div>
-            <dir style="height:40px;" v-if="msg.type !== 'cs'"></dir>
+            <dir style="height:80px;" v-if="msg.type !== 'cs'"></dir>
             <div class="btnbox" v-if="msg.type !== 'cs'">
-                <button @click="qx" class="btn">取消</button>
-                <button @click="qr" class="btn qr">确认</button>
+                <button @click.stop="qx" class="btn">取消</button>
+                <button @click.stop="qr" class="btn qr">确认</button>
             </div>
         </div>
         <!-- <Eject ref="eject" /> -->
@@ -88,6 +88,9 @@ export default {
     }
   },
   methods: {
+    close () {
+      this.show = false
+    },
     initScorll () {
       let eje = this.$refs.eje
       let bs = new BScroll(eje, {probeType: 3})
